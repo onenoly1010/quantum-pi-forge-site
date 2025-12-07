@@ -1,313 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quantum Pi Forge Genesis — Narrative Analysis</title>
-
-<style>
-/* ------------------------------ GLOBAL ------------------------------ */
-:root {
-    --bg-dark: #0c0c0f;
-    --bg-light: #f6f4ff;
-    --text-dark: #e8e6ff;
-    --text-light: #1b1b23;
-    --accent: #7b3fe4;
-    --accent-soft: rgba(123, 63, 228, 0.15);
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    font-family: system-ui, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-dark);
-    transition: background 0.3s ease, color 0.3s ease;
-    overflow-x: hidden;
-}
-
-/* Dark/Light Mode Toggle */
-.toggle-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 2000;
-}
-.toggle {
-    cursor: pointer;
-    padding: 10px 18px;
-    background: var(--accent);
-    border-radius: 20px;
-    color: white;
-    font-size: 0.9rem;
-    user-select: none;
-}
-
-/* ------------------------------ PARTICLE BACKGROUND ------------------------------ */
-#particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -2;
-}
-
-/* ------------------------------ FLOATING PI SYMBOLS ------------------------------ */
-.pi {
-    position: fixed;
-    font-size: 16px;
-    opacity: 0.15;
-    color: #ffffff;
-    animation: float 12s linear infinite;
-}
-@keyframes float {
-    0% { transform: translateY(120vh) rotate(0deg); }
-    100% { transform: translateY(-20vh) rotate(720deg); }
-}
-
-/* ------------------------------ HEADER ------------------------------ */
-header {
-    padding: 120px 20px;
-    text-align: center;
-    position: relative;
-    z-index: 10;
-}
-header h1 {
-    font-size: 3.2rem;
-    margin: 0;
-    background: linear-gradient(90deg, #fff, #b692ff, #fff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-header p {
-    font-size: 1.2rem;
-    opacity: 0.8;
-    margin-top: 10px;
-}
-
-/* ------------------------------ MAIN CONTENT ------------------------------ */
-.container {
-    max-width: 960px;
-    padding: 40px 20px;
-    margin: auto;
-}
-
-section {
-    margin: 70px 0;
-}
-
-h2 {
-    font-size: 2rem;
-    border-left: 4px solid var(--accent);
-    padding-left: 15px;
-    margin-bottom: 25px;
-}
-
-h3 {
-    font-size: 1.4rem;
-    color: #bf9afd;
-    margin-top: 30px;
-}
-
-p, ul {
-    font-size: 1.05rem;
-    line-height: 1.7;
-}
-
-.highlight {
-    background: var(--accent-soft);
-    border-left: 3px solid var(--accent);
-    padding: 14px 16px;
-    border-radius: 6px;
-    margin: 30px 0;
-}
-
-/* Two Column Layout */
-.two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-}
-@media (max-width: 800px) {
-    .two-col {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ------------------------------ FOOTER ------------------------------ */
-footer {
-    text-align: center;
-    padding: 60px 20px;
-    opacity: 0.7;
-    font-size: 0.9rem;
-}
-</style>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Pi Forge Genesis — Visionary Narrative</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {margin:0;padding:0;font-family:'Inter',sans-serif;background:#0d0d0d;color:#eaeaea;line-height:1.75;overflow-x:hidden;}
+    nav {position:sticky;top:0;background:#111;padding:12px;text-align:center;z-index:1000;}
+    nav ul {list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:20px;}
+    nav a {color:#c7a8ff;text-decoration:none;font-weight:600;}
+    nav a:hover {color:#fff;}
+    header {text-align:center;padding:100px 20px 60px;background:linear-gradient(180deg,rgba(60,0,120,0.4),rgba(0,0,0,0));}
+    header h1 {font-size:3rem;font-weight:900;background:linear-gradient(90deg,#c084fc,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;}
+    header p {margin-top:15px;font-size:1.2rem;opacity:0.8;}
+    section {max-width:900px;margin:auto;padding:60px 20px;}
+    h2 {font-size:2rem;margin-top:50px;border-left:4px solid #7b3fe4;padding-left:12px;}
+    h3 {font-size:1.3rem;color:#c7a8ff;margin-top:25px;}
+    .highlight {background:rgba(123,63,228,0.15);border-left:4px solid #7b3fe4;padding:14px;margin:28px 0;border-radius:8px;}
+    footer {text-align:center;padding:40px 20px;font-size:0.9rem;opacity:0.7;color:#aaa;}
+    canvas#particles {position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0.25;}
+    .codex {background:rgba(123,63,228,0.1);padding:20px;border-radius:8px;font-family:monospace;overflow:auto;}
+    form input, form textarea {width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #444;background:#222;color:#eee;}
+    form button {padding:10px 20px;background:#7b3fe4;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+    form button:hover {background:#9e63ff;}
+  </style>
 </head>
-
 <body>
-
-<!-- LIGHT/DARK MODE TOGGLE -->
-<div class="toggle-container">
-    <div class="toggle" onclick="toggleMode()">Toggle Mode</div>
-</div>
-
-<!-- PARTICLES -->
 <canvas id="particles"></canvas>
 
-<!-- FLOATING PI SYMBOLS -->
-<script>
-for (let i = 0; i < 40; i++) {
-    const pi = document.createElement('div');
-    pi.className = 'pi';
-    pi.textContent = 'π';
-    pi.style.left = Math.random() * 100 + 'vw';
-    pi.style.animationDuration = 8 + Math.random() * 10 + 's';
-    document.body.appendChild(pi);
-}
-</script>
+<nav>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#codex">Codex</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-<!-- HEADER -->
-<header>
-    <h1>🚀 Quantum Pi Forge Genesis</h1>
-    <p>A Deep Dive into a Visionary Narrative</p>
+<header id="home">
+  <h1>🚀 Quantum Pi Forge Genesis</h1>
+  <p>A Deep Dive into a Visionary Narrative</p>
 </header>
 
-<!-- MAIN CONTENT -->
-<div class="container">
-
 <section>
-    <h2>What Is the Quantum Pi Forge Genesis?</h2>
-    <p>
-        Quantum Pi Forge Genesis presents itself as an “intent-driven sovereign blockchain,” blending
-        decentralized tech with conceptual art. Instead of competing with crypto giants, it reframes
-        itself as a philosophical movement challenging modern digital power structures.
-    </p>
+  <h2>What Is the Quantum Pi Forge Genesis?</h2>
+  <p>Quantum Pi Forge Genesis presents itself as an “intent-driven sovereign blockchain,” blending decentralized tech with conceptual art.</p>
+  <h2>The Core Narrative: The Ethical Rebel</h2>
+  <p>Founder Kris Olofson is framed as the “ethical rebel,” building from a single laptop.</p>
+  <h2>Visionary Concepts</h2>
+  <p>Ideas like the Interstitial Codex and Qualia Fusion turn philosophy into code.</p>
+  <h2>Technical Claims</h2>
+  <p>Quantum-inspired algorithms are classical, not true quantum computing — but symbolically powerful.</p>
+  <h2>Final Analysis</h2>
+  <div class="highlight">Quantum Pi Forge Genesis reads more like a conceptual manifesto than a conventional blockchain whitepaper.</div>
 </section>
 
-<section class="two-col">
-    <div>
-        <h2>The Ethical Rebel Narrative</h2>
-
-        <h3>1. The Laptop Genesis</h3>
-        <p>
-            The story begins with a single laptop — a symbolic defiance of corporate blockchain launches.
-            Founder <strong>Kris Olofson</strong> appears as a solitary ethical innovator.
-        </p>
-
-        <h3>2. A Digital Mythos</h3>
-        <p>
-            By using archetypes like “digital shaman,” the project creates a cultural identity instead of
-            a conventional technical brand.
-        </p>
-    </div>
-
-    <div>
-        <h2>Philosophy as Code</h2>
-
-        <h3>The Interstitial Codex</h3>
-        <p>A governance layer framed as an ethical constitution built into the system.</p>
-
-        <h3>Qualia Fusion</h3>
-        <p>
-            A symbolic concept suggesting alignment between human intent and system decision-making.
-        </p>
-
-        <h3>Evocative Language</h3>
-        <p>
-            Terms like “pi-cycle heartbeats” and “ethical verity audits” give the system narrative weight.
-        </p>
-    </div>
+<section id="about">
+  <h2>About Quantum Pi Forge</h2>
+  <h3>Founder’s Vision</h3>
+  <p>Kris Olofson is framed as the “ethical rebel,” building a sovereign blockchain from a single laptop.</p>
+  <h3>Laptop Genesis</h3>
+  <p>The project’s mythic origin emphasizes independence and defiance of corporate blockchain launches.</p>
+  <h3>Philosophical Roots</h3>
+  <p>Quantum Pi Forge is as much conceptual art as it is technology, blending ethics and narrative.</p>
 </section>
 
-<section>
-    <h2>Technical Claims</h2>
-
-    <h3>Quantum-Inspired Algorithms</h3>
-    <p>
-        These are classical algorithms influenced by quantum math — not actual quantum computing. They
-        connect present tech to future possibilities.
-    </p>
-
-    <h3>The Burden of Proof</h3>
-    <p>
-        Abstract features like qualia fusion will need real-world auditing mechanisms to evolve into
-        functional components.
-    </p>
+<section id="codex">
+  <h2>Interstitial Codex</h2>
+  <p>Symbolic Governance Framework</p>
+  <div class="codex">
+<pre>{
+  "codex": {
+    "motto": "intent × verity",
+    "principles": [
+      "sovereignty: individual authorship over infrastructure",
+      "ethics-first: audits > profit-first signal",
+      "interstitial: governance as adaptive pattern"
+    ],
+    "qualiaFragments": [
+      {"id":"q0","weight":0.77,"note":"compassion-weighted intent"},
+      {"id":"q1","weight":0.43,"note":"curiosity-weighted intent"}
+    ]
+  }
+}</pre>
+  </div>
 </section>
 
-<section>
-    <h2>Final Analysis</h2>
-
-    <div class="highlight">
-        Quantum Pi Forge Genesis reads more like a conceptual manifesto than a conventional blockchain whitepaper.
-    </div>
-
-    <p>
-        Its strength lies in its cultural ambition — redefining how digital systems intersect with ethics
-        and conscious intent. Its next chapter depends on how much of its philosophy becomes executable
-        code.
-    </p>
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:yourname@example.com">yourname@example.com</a></p>
+  <h2>Socials</h2>
+  <ul>
+    <li><a href="https://github.com/onenoly1010">GitHub</a></li>
+    <li><a href="https://twitter.com/yourhandle">Twitter</a></li>
+  </ul>
+  <h2>Message Form</h2>
+  <form name="contact" method="POST" data-netlify="true">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message"></textarea>
+    <button type="submit">Send</button>
+  </form>
 </section>
 
-</div>
+<footer>© 2025 Quantum Pi Forge Genesis — Published via GitHub Pages by onenoly1010</footer>
 
-<footer>
-    © 2025 Quantum Pi Forge Genesis — Narrative Analysis
-</footer>
-
-<!-- PARTICLE SCRIPT -->
 <script>
-/* Soft particle drift */
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let w, h;
-function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
-window.addEventListener('resize', resize);
-resize();
-
-let particles = [];
-for (let i = 0; i < 90; i++) {
-    particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 2 + 1,
-        dx: (Math.random() - 0.5) * 0.4,
-        dy: (Math.random() - 0.5) * 0.4
-    });
-}
-
-function draw() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = 'rgba(255,255,255,0.12)';
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-        p.x += p.dx; p.y += p.dy;
-        if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
-    });
-    requestAnimationFrame(draw);
-}
-draw();
-
-/* Light/Dark Mode Toggle */
-function toggleMode() {
-    const root = document.documentElement;
-    const dark = getComputedStyle(root).getPropertyValue('--bg-dark').trim();
-    const current = getComputedStyle(document.body).backgroundColor;
-
-    if (current === 'rgb(12, 12, 15)') {
-        document.body.style.background = 'var(--bg-light)';
-        document.body.style.color = 'var(--text-light)';
-    } else {
-        document.body.style.background = 'var(--bg-dark)';
-        document.body.style.color = 'var(--text-dark)';
-    }
-}
+const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");let particles=[];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}resize();window.onresize=resize;
+for(let i=0;i<80;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,size:Math.random()*2+1});}
+function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="white";for(let p of particles){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();}requestAnimationFrame(animate);}animate();
 </script>
-
 </body>
 </html>
