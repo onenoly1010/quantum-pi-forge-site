@@ -121,6 +121,8 @@ function createQuantumParticles() {
     // Random animation duration
     const duration = Math.random() * 20 + 10;
     
+    const animName = createParticleAnimation(i);
+    
     particle.style.cssText = `
       position: absolute;
       left: ${x}%;
@@ -131,7 +133,7 @@ function createQuantumParticles() {
       border-radius: 50%;
       opacity: 0;
       box-shadow: 0 0 10px ${color}, 0 0 20px ${color};
-      animation: particleFloat ${duration}s ease-in-out infinite;
+      animation: ${animName} ${duration}s ease-in-out infinite;
       animation-delay: ${Math.random() * 5}s;
     `;
     
@@ -139,35 +141,52 @@ function createQuantumParticles() {
   }
 }
 
-// Add particle animation styles dynamically
+// Add base particle animation styles
 const style = document.createElement('style');
 style.textContent = `
   .quantum-particle {
     pointer-events: none;
   }
-  
-  @keyframes particleFloat {
-    0% {
-      opacity: 0;
-      transform: translate(0, 0) scale(0);
-    }
-    10% {
-      opacity: 0.6;
-    }
-    50% {
-      opacity: 0.8;
-      transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1);
-    }
-    90% {
-      opacity: 0.6;
-    }
-    100% {
-      opacity: 0;
-      transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(0);
-    }
-  }
 `;
 document.head.appendChild(style);
+
+// Create unique animation for each particle
+function createParticleAnimation(index) {
+  const animName = `particleFloat${index}`;
+  const midX = Math.random() * 100 - 50;
+  const midY = Math.random() * 100 - 50;
+  const endX = Math.random() * 200 - 100;
+  const endY = Math.random() * 200 - 100;
+  
+  const keyframes = `
+    @keyframes ${animName} {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0);
+      }
+      10% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 0.8;
+        transform: translate(${midX}px, ${midY}px) scale(1);
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(${endX}px, ${endY}px) scale(0);
+      }
+    }
+  `;
+  
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = keyframes;
+  document.head.appendChild(styleSheet);
+  
+  return animName;
+}
 
 // Initialize particles on load
 window.addEventListener('load', () => {
@@ -180,14 +199,16 @@ window.addEventListener('load', () => {
 
 // Debounce resize events
 let resizeTimer;
+let previousWidth = window.innerWidth;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     // Re-initialize particles on significant resize
     const currentWidth = window.innerWidth;
-    if (Math.abs(currentWidth - window.innerWidth) > 100) {
+    if (Math.abs(currentWidth - previousWidth) > 100) {
       quantumBg.innerHTML = '';
       createQuantumParticles();
+      previousWidth = currentWidth;
     }
   }, 250);
 });
@@ -215,11 +236,16 @@ document.addEventListener('mousedown', () => {
 if ('loading' in HTMLImageElement.prototype) {
   const images = document.querySelectorAll('img[loading="lazy"]');
   images.forEach(img => {
-    img.src = img.dataset.src;
+    if (img.dataset.src) {
+      img.src = img.dataset.src;
+    }
   });
 } else {
   // Fallback for browsers that don't support lazy loading
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
-  document.body.appendChild(script);
+  const lazyImages = document.querySelectorAll('img[data-src]');
+  if (lazyImages.length > 0) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
+  }
 }

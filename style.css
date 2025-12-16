@@ -238,8 +238,7 @@ body {
 .piforge-logo {
   width: 200px;
   height: 200px;
-  filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.4))
-          drop-shadow(0 0 60px rgba(168, 85, 247, 0.3));
+  filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.4)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.3));
   animation: pulseGlow 4s ease-in-out infinite;
 }
 
