@@ -101,6 +101,8 @@ const quantumBg = document.getElementById('quantumBg');
 
 // Create quantum particles
 function createQuantumParticles() {
+  if (!quantumBg) return; // Guard against missing element
+  
   const particleCount = window.innerWidth < 768 ? 15 : 30;
   
   for (let i = 0; i < particleCount; i++) {
@@ -205,7 +207,7 @@ window.addEventListener('resize', () => {
   resizeTimer = setTimeout(() => {
     // Re-initialize particles on significant resize
     const currentWidth = window.innerWidth;
-    if (Math.abs(currentWidth - previousWidth) > 100) {
+    if (quantumBg && Math.abs(currentWidth - previousWidth) > 100) {
       quantumBg.innerHTML = '';
       createQuantumParticles();
       previousWidth = currentWidth;
