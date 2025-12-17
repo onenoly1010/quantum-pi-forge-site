@@ -4,13 +4,15 @@
 
 // Target date: Dec 17, 2025 23:59:59 UTC
 const launchDate = new Date('2025-12-17T23:59:59Z').getTime();
+let countdownInterval;
 
 function updateCountdown() {
   const now = new Date().getTime();
   const timeRemaining = launchDate - now;
   
   if (timeRemaining <= 0) {
-    // Launch has happened
+    // Launch has happened - clear interval and display zeros
+    clearInterval(countdownInterval);
     document.getElementById('days').textContent = '00';
     document.getElementById('hours').textContent = '00';
     document.getElementById('minutes').textContent = '00';
@@ -33,7 +35,7 @@ function updateCountdown() {
 
 // Update countdown immediately and then every second
 updateCountdown();
-setInterval(updateCountdown, 1000);
+countdownInterval = setInterval(updateCountdown, 1000);
 
 // ========================================
 // SMOOTH SCROLL NAVIGATION
