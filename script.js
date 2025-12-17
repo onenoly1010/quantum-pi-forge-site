@@ -262,6 +262,11 @@ if ('loading' in HTMLImageElement.prototype) {
   const banner = document.getElementById('genesisBanner');
   const closeBtn = document.getElementById('closeBanner');
   
+  // Check if banner element exists
+  if (!banner) {
+    return;
+  }
+  
   // Check if banner was previously closed
   if (localStorage.getItem('genesisBannerClosed') === 'true') {
     banner.classList.add('hidden');
@@ -283,10 +288,16 @@ if ('loading' in HTMLImageElement.prototype) {
     
     if (timeLeft < 0) {
       // Launch has happened
-      document.querySelector('.banner-title').textContent = '🎉 GENESIS LIVE';
-      document.querySelector('.countdown-timer').innerHTML = 'EXPLORE NOW';
-      document.querySelector('.banner-cta').textContent = 'ENTER DASHBOARD →';
-      document.querySelector('.banner-cta').href = 'https://quantum-pi-forge-fixed.vercel.app/dashboard';
+      const bannerTitle = document.querySelector('.banner-title');
+      const countdownTimer = document.querySelector('.countdown-timer');
+      const bannerCta = document.querySelector('.banner-cta');
+      
+      if (bannerTitle) bannerTitle.textContent = '🎉 GENESIS LIVE';
+      if (countdownTimer) countdownTimer.innerHTML = 'EXPLORE NOW';
+      if (bannerCta) {
+        bannerCta.textContent = 'ENTER DASHBOARD →';
+        bannerCta.href = 'https://quantum-pi-forge-fixed.vercel.app/dashboard';
+      }
       return;
     }
     
@@ -295,10 +306,15 @@ if ('loading' in HTMLImageElement.prototype) {
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
     
-    document.getElementById('days').textContent = String(days).padStart(2, '0');
-    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    
+    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
   }
   
   // Initial update
