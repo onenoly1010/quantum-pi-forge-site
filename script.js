@@ -1,4 +1,41 @@
 // ========================================
+// COUNTDOWN TIMER
+// ========================================
+
+// Target date: Dec 17, 2025 23:59:59 UTC
+const launchDate = new Date('2025-12-17T23:59:59Z').getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const timeRemaining = launchDate - now;
+  
+  if (timeRemaining <= 0) {
+    // Launch has happened
+    document.getElementById('days').textContent = '00';
+    document.getElementById('hours').textContent = '00';
+    document.getElementById('minutes').textContent = '00';
+    document.getElementById('seconds').textContent = '00';
+    return;
+  }
+  
+  // Calculate time units
+  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+  
+  // Update DOM with padded values
+  document.getElementById('days').textContent = String(days).padStart(2, '0');
+  document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+  document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+}
+
+// Update countdown immediately and then every second
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ========================================
 // SMOOTH SCROLL NAVIGATION
 // ========================================
 
