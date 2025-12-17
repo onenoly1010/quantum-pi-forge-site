@@ -251,3 +251,59 @@ if ('loading' in HTMLImageElement.prototype) {
     document.body.appendChild(script);
   }
 }
+
+// ========================================
+// GENESIS LAUNCH COUNTDOWN
+// ========================================
+
+// Genesis Launch Countdown
+(function() {
+  const LAUNCH_DATE = new Date('2025-12-17T20:00:00Z').getTime();
+  const banner = document.getElementById('genesisBanner');
+  const closeBtn = document.getElementById('closeBanner');
+  
+  // Check if banner was previously closed
+  if (localStorage.getItem('genesisBannerClosed') === 'true') {
+    banner.classList.add('hidden');
+    return;
+  }
+  
+  // Close banner functionality
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      banner.classList.add('hidden');
+      localStorage.setItem('genesisBannerClosed', 'true');
+    });
+  }
+  
+  // Countdown update function
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const timeLeft = LAUNCH_DATE - now;
+    
+    if (timeLeft < 0) {
+      // Launch has happened
+      document.querySelector('.banner-title').textContent = '🎉 GENESIS LIVE';
+      document.querySelector('.countdown-timer').innerHTML = 'EXPLORE NOW';
+      document.querySelector('.banner-cta').textContent = 'ENTER DASHBOARD →';
+      document.querySelector('.banner-cta').href = 'https://quantum-pi-forge-fixed.vercel.app/dashboard';
+      return;
+    }
+    
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  }
+  
+  // Initial update
+  updateCountdown();
+  
+  // Update every second
+  setInterval(updateCountdown, 1000);
+})();
