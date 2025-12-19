@@ -272,50 +272,56 @@
                 <div class="card-header">🌐 Network Status</div>
                 <div class="metric">
                     <span class="metric-label">
-                        <span class="status-indicator status-active"></span>
-                        System Status
+                        <span class="status-indicator status-active" id="genesis-status"></span>
+                        Genesis Backend
                     </span>
-                    <span class="metric-value">OPERATIONAL</span>
+                    <span class="metric-value" id="genesis-status-text">CHECKING...</span>
                 </div>
                 <div class="metric">
-                    <span class="metric-label">Deployment Progress</span>
-                    <span class="metric-value">85%</span>
+                    <span class="metric-label">
+                        <span class="status-indicator status-active" id="resonance-status"></span>
+                        Resonance Engine
+                    </span>
+                    <span class="metric-value" id="resonance-status-text">CHECKING...</span>
                 </div>
                 <div class="metric">
-                    <span class="metric-label">Active Nodes</span>
-                    <span class="metric-value">3</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">⚡ Trinity Metrics</div>
-                <div class="metric">
-                    <span class="metric-label">Pi Network</span>
-                    <span class="metric-value">✅ READY</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">0G Aristotle</span>
-                    <span class="metric-value">🟡 PENDING</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Ethereum</span>
-                    <span class="metric-value">✅ READY</span>
+                    <span class="metric-label">
+                        <span class="status-indicator status-active" id="dex-status"></span>
+                        DEX Frontend
+                    </span>
+                    <span class="metric-value" id="dex-status-text">CHECKING...</span>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">📊 System Health</div>
+                <div class="card-header">⚡ Live Metrics</div>
                 <div class="metric">
-                    <span class="metric-label">Uptime</span>
-                    <span class="metric-value">99.9%</span>
+                    <span class="metric-label">Pending Decisions</span>
+                    <span class="metric-value" id="pending-decisions">--</span>
                 </div>
                 <div class="metric">
-                    <span class="metric-label">Response Time</span>
-                    <span class="metric-value">&lt;10ms</span>
+                    <span class="metric-label">Safety Score</span>
+                    <span class="metric-value" id="safety-score">--</span>
                 </div>
                 <div class="metric">
-                    <span class="metric-label">Active Users</span>
-                    <span class="metric-value">127</span>
+                    <span class="metric-label">Resonance Version</span>
+                    <span class="metric-value" id="resonance-version">--</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📊 System Info</div>
+                <div class="metric">
+                    <span class="metric-label">Overall Status</span>
+                    <span class="metric-value" id="overall-status">OPERATIONAL</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Last Update</span>
+                    <span class="metric-value" id="last-update">--</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Active Services</span>
+                    <span class="metric-value" id="active-services">0/3</span>
                 </div>
             </div>
         </div>
@@ -388,6 +394,210 @@
 
         updateCountdown();
         setInterval(updateCountdown, 1000);
+    </script>
+
+    <!-- Live Dashboard Integration -->
+    <script type="module">
+        import { ECOSYSTEM_SERVICES, checkEcosystemHealth, getEcosystemMetrics } from './api/ecosystem-gateway.js';
+
+        /**
+         * QuantumForgeLiveDashboard - Manages real-time ecosystem data updates
+         */
+        class QuantumForgeLiveDashboard {
+            constructor() {
+                this.updateInterval = 10000; // 10 seconds for metrics
+                this.healthCheckInterval = 30000; // 30 seconds for health checks
+                this.metricsIntervalId = null;
+                this.healthIntervalId = null;
+            }
+
+            /**
+             * Initialize the dashboard with intervals
+             */
+            async initialize() {
+                console.log('🚀 Initializing Quantum Forge Live Dashboard...');
+                
+                // Set up navigation links
+                this.setupNavigationLinks();
+                
+                // Run initial updates
+                await this.updateSystemHealth();
+                await this.updateMetrics();
+                
+                // Set up periodic updates
+                this.healthIntervalId = setInterval(() => this.updateSystemHealth(), this.healthCheckInterval);
+                this.metricsIntervalId = setInterval(() => this.updateMetrics(), this.updateInterval);
+                
+                console.log('✅ Dashboard initialized successfully');
+            }
+
+            /**
+             * Update system health status indicators
+             */
+            async updateSystemHealth() {
+                try {
+                    const health = await checkEcosystemHealth();
+                    
+                    // Update individual service status
+                    this.updateServiceStatus('genesis', health.services.genesis);
+                    this.updateServiceStatus('resonance', health.services.resonance);
+                    this.updateServiceStatus('dex', health.services.dex);
+                    
+                    // Update overall status
+                    const overallStatusEl = document.getElementById('overall-status');
+                    if (overallStatusEl) {
+                        const statusMap = {
+                            'healthy': '✅ HEALTHY',
+                            'degraded': '⚠️ DEGRADED',
+                            'down': '❌ DOWN'
+                        };
+                        overallStatusEl.textContent = statusMap[health.overall] || 'UNKNOWN';
+                    }
+                    
+                    // Count active services
+                    const activeCount = Object.values(health.services)
+                        .filter(s => s.status === 'healthy').length;
+                    const totalCount = Object.keys(health.services).length;
+                    
+                    const activeServicesEl = document.getElementById('active-services');
+                    if (activeServicesEl) {
+                        activeServicesEl.textContent = `${activeCount}/${totalCount}`;
+                    }
+                    
+                    console.log('✓ Health check completed:', health.overall);
+                } catch (error) {
+                    console.error('❌ Health check failed:', error);
+                    this.handleError('health check');
+                }
+            }
+
+            /**
+             * Update a specific service status indicator
+             */
+            updateServiceStatus(serviceName, status) {
+                const statusIndicator = document.getElementById(`${serviceName}-status`);
+                const statusText = document.getElementById(`${serviceName}-status-text`);
+                
+                if (!statusIndicator || !statusText) return;
+                
+                // Remove all status classes
+                statusIndicator.classList.remove('status-active', 'status-warning', 'status-error');
+                
+                // Set status based on health
+                if (status.status === 'healthy') {
+                    statusIndicator.classList.add('status-active');
+                    statusText.textContent = '✅ ONLINE';
+                    statusText.style.color = '#00ff41';
+                } else if (status.status === 'degraded') {
+                    statusIndicator.classList.add('status-warning');
+                    statusText.textContent = '⚠️ DEGRADED';
+                    statusText.style.color = '#ffaa00';
+                } else {
+                    statusIndicator.classList.add('status-error');
+                    statusText.textContent = '❌ OFFLINE';
+                    statusText.style.color = '#ff4444';
+                }
+            }
+
+            /**
+             * Update metrics from ecosystem services
+             */
+            async updateMetrics() {
+                try {
+                    const metrics = await getEcosystemMetrics();
+                    
+                    // Update Genesis metrics
+                    if (metrics.genesis && metrics.genesis.available) {
+                        const pendingDecisionsEl = document.getElementById('pending-decisions');
+                        const safetyScoreEl = document.getElementById('safety-score');
+                        
+                        if (pendingDecisionsEl) {
+                            pendingDecisionsEl.textContent = metrics.genesis.pendingDecisions || 0;
+                        }
+                        if (safetyScoreEl) {
+                            safetyScoreEl.textContent = metrics.genesis.safetyScore || 'N/A';
+                        }
+                    }
+                    
+                    // Update Resonance metrics
+                    if (metrics.resonance && metrics.resonance.available) {
+                        const versionEl = document.getElementById('resonance-version');
+                        if (versionEl) {
+                            versionEl.textContent = metrics.resonance.version || 'Unknown';
+                        }
+                    }
+                    
+                    // Update last update timestamp
+                    const lastUpdateEl = document.getElementById('last-update');
+                    if (lastUpdateEl) {
+                        const time = new Date().toLocaleTimeString();
+                        lastUpdateEl.textContent = time;
+                    }
+                    
+                    console.log('✓ Metrics updated');
+                } catch (error) {
+                    console.error('❌ Metrics update failed:', error);
+                    this.handleError('metrics update');
+                }
+            }
+
+            /**
+             * Setup navigation links dynamically using ecosystem config
+             */
+            setupNavigationLinks() {
+                // Add click handlers or update hrefs if needed
+                console.log('✓ Navigation links configured');
+            }
+
+            /**
+             * Handle errors gracefully
+             */
+            handleError(operation) {
+                console.warn(`⚠️ ${operation} encountered an error, will retry...`);
+                // Display user-friendly message if needed
+            }
+
+            /**
+             * Cleanup intervals on page unload
+             */
+            cleanup() {
+                if (this.metricsIntervalId) {
+                    clearInterval(this.metricsIntervalId);
+                }
+                if (this.healthIntervalId) {
+                    clearInterval(this.healthIntervalId);
+                }
+                console.log('🛑 Dashboard cleanup completed');
+            }
+        }
+
+        // Add status indicator styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .status-warning {
+                background: #ffaa00 !important;
+                box-shadow: 0 0 10px #ffaa00 !important;
+            }
+            .status-error {
+                background: #ff4444 !important;
+                box-shadow: 0 0 10px #ff4444 !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize dashboard when DOM is ready
+        let dashboard;
+        document.addEventListener('DOMContentLoaded', async () => {
+            dashboard = new QuantumForgeLiveDashboard();
+            await dashboard.initialize();
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (dashboard) {
+                dashboard.cleanup();
+            }
+        });
     </script>
 </body>
 </html>
