@@ -84,8 +84,8 @@ export async function fetchFromEcosystem(url, options = {}) {
       
       // Don't retry on abort (timeout) for last attempt
       if (attempt < retries - 1) {
-        // Exponential backoff
-        const delay = retryDelay * Math.pow(2, attempt);
+        // Exponential backoff with max 5 second delay
+        const delay = Math.min(retryDelay * Math.pow(2, attempt), 5000);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
