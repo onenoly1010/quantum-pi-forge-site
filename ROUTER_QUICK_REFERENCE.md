@@ -9,7 +9,7 @@ This document provides a quick reference for resolving the DEX router address bl
 ## Current Status
 
 - **Launch Blocker**: YES - CRITICAL
-- **Timeline**: 48 hours from issue creation (2025-12-14)
+- **Timeline**: 48 hours from issue creation
 - **Router Address**: PENDING
 - **Configuration File**: `.env.launch`
 - **Deployment Guide**: `DEPLOYMENT_GUIDE.md`
