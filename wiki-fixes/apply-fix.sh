@@ -30,20 +30,26 @@ fi
 
 # Apply the fix
 echo "✏️  Applying fix to Architecture Diagram..."
-cp wiki-fixes/Architecture-Diagram-FIXED.md "$WIKI_DIR/Architecture‐Diagram.md.md"
+TARGET_FILE="Architecture‐Diagram.md.md"
+cp "wiki-fixes/Architecture-Diagram-FIXED.md" "$WIKI_DIR/$TARGET_FILE"
 
 # Show the changes
 cd "$WIKI_DIR" || exit 1
 echo ""
 echo "📊 Changes made:"
-git diff "Architecture‐Diagram.md.md" || true
+if [ -f "$TARGET_FILE" ]; then
+    git diff "$TARGET_FILE" || echo "Note: Could not show diff"
+else
+    echo "Warning: Target file not found after copy"
+    exit 1
+fi
 
 # Commit and push
 echo ""
 read -p "Do you want to commit and push these changes? (y/n) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    git add "Architecture‐Diagram.md.md"
+    git add "$TARGET_FILE"
     git commit -m "Fix architecture diagram rendering by closing Mermaid code block" \
                -m "" \
                -m "- Add missing closing backticks for Mermaid code block" \
