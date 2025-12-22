@@ -18,20 +18,32 @@ The corrected version of the file is provided in `Architecture-Diagram-FIXED.md`
 
 ## How to Apply the Fix
 
-### Option 1: Through GitHub Web Interface (Recommended)
-1. Go to the Wiki tab in the GitHub repository
-2. Navigate to the Architecture-Diagram page
+### Option 1: Using the Automated Script (Easiest)
+```bash
+# From the repository root
+./wiki-fixes/apply-fix.sh
+```
+
+This script will:
+- Clone or update the wiki repository
+- Apply the fix automatically
+- Show you the changes
+- Prompt you to commit and push
+
+### Option 2: Through GitHub Web Interface (No Git Required)
+1. Go to the [Wiki tab](https://github.com/onenoly1010/quantum-pi-forge-site/wiki) in the GitHub repository
+2. Navigate to the [Architecture-Diagram](https://github.com/onenoly1010/quantum-pi-forge-site/wiki/Architecture%E2%80%90Diagram) page
 3. Click "Edit"
 4. Replace the entire content with the content from `Architecture-Diagram-FIXED.md`
-5. Save the changes
+5. Save the changes with commit message: "Fix architecture diagram rendering"
 
-### Option 2: Through Git (if you have wiki repo access)
+### Option 3: Manual Git Process (if you have wiki repo access)
 ```bash
 # Clone the wiki repository
 git clone https://github.com/onenoly1010/quantum-pi-forge-site.wiki.git
 
 # Copy the fixed file
-cp Architecture-Diagram-FIXED.md quantum-pi-forge-site.wiki/Architecture‐Diagram.md.md
+cp wiki-fixes/Architecture-Diagram-FIXED.md quantum-pi-forge-site.wiki/Architecture‐Diagram.md.md
 
 # Commit and push
 cd quantum-pi-forge-site.wiki
