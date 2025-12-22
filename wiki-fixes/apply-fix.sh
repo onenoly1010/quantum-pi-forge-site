@@ -2,6 +2,7 @@
 # Script to apply the Architecture Diagram fix to the wiki
 
 set -e
+set -u
 
 echo "🔧 Applying Architecture Diagram fix to wiki..."
 echo ""
@@ -40,13 +41,13 @@ read -p "Do you want to commit and push these changes? (y/n) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     git add "Architecture‐Diagram.md.md"
-    git commit -m "Fix architecture diagram rendering by closing Mermaid code block
-
-- Add missing closing backticks for Mermaid code block
-- Remove extraneous content from other wiki pages
-- Add proper Related Resources section
-
-Fixes: Non-rendering architecture diagram issue"
+    git commit -m "Fix architecture diagram rendering by closing Mermaid code block" \
+               -m "" \
+               -m "- Add missing closing backticks for Mermaid code block" \
+               -m "- Remove extraneous content from other wiki pages" \
+               -m "- Add proper Related Resources section" \
+               -m "" \
+               -m "Fixes: Non-rendering architecture diagram issue"
     
     echo "🚀 Pushing changes to wiki..."
     git push origin master

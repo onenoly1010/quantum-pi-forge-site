@@ -13,7 +13,7 @@ The file `Architecture‐Diagram.md.md` in the wiki repository had a **missing c
 
 ### Technical Details
 - **Location**: Lines 10-54 in `Architecture‐Diagram.md.md`
-- **Issue**: Mermaid code block started with ````mermaid` but never closed with ````
+- **Issue**: Mermaid code block started with ``` (three backticks) but never closed with matching ```
 - **Impact**: GitHub's Markdown parser treated everything after line 10 as code, not rendering the diagram
 - **Secondary issue**: 140 lines of unrelated content from other wiki pages were incorrectly included
 
