@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'Static site - no build needed'",
+    "build": "node -e \"console.log('Static site - no build needed')\"",
     "deploy": "vercel --prod",
     "deploy-preview": "vercel"
   },
