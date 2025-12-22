@@ -4,6 +4,9 @@
 set -e
 set -u
 
+# Store the original directory
+ORIGINAL_DIR="$(pwd)"
+
 echo "🔧 Applying Architecture Diagram fix to wiki..."
 echo ""
 
@@ -17,12 +20,12 @@ fi
 WIKI_DIR="quantum-pi-forge-site.wiki"
 if [ -d "$WIKI_DIR" ]; then
     echo "📦 Wiki repository already exists, updating..."
-    cd "$WIKI_DIR"
-    git pull origin master
-    cd ..
+    cd "$WIKI_DIR" || exit 1
+    git pull origin master || exit 1
+    cd "$ORIGINAL_DIR" || exit 1
 else
     echo "📦 Cloning wiki repository..."
-    git clone https://github.com/onenoly1010/quantum-pi-forge-site.wiki.git
+    git clone https://github.com/onenoly1010/quantum-pi-forge-site.wiki.git || exit 1
 fi
 
 # Apply the fix
@@ -30,7 +33,7 @@ echo "✏️  Applying fix to Architecture Diagram..."
 cp wiki-fixes/Architecture-Diagram-FIXED.md "$WIKI_DIR/Architecture‐Diagram.md.md"
 
 # Show the changes
-cd "$WIKI_DIR"
+cd "$WIKI_DIR" || exit 1
 echo ""
 echo "📊 Changes made:"
 git diff "Architecture‐Diagram.md.md" || true
@@ -58,4 +61,4 @@ else
     echo "⏸️  Changes not committed. You can review them in $WIKI_DIR"
 fi
 
-cd ..
+cd "$ORIGINAL_DIR" || exit 1
