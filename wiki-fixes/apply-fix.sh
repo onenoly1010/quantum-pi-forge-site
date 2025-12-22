@@ -42,9 +42,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     git add "Architecture‐Diagram.md.md"
     git commit -m "Fix architecture diagram rendering by closing Mermaid code block
 
-- Added missing closing backticks for Mermaid code block
-- Removed extraneous content from other wiki pages
-- Added proper Related Resources section
+- Add missing closing backticks for Mermaid code block
+- Remove extraneous content from other wiki pages
+- Add proper Related Resources section
 
 Fixes: Non-rendering architecture diagram issue"
     
