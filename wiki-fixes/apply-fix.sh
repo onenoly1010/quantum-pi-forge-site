@@ -30,7 +30,9 @@ fi
 
 # Apply the fix
 echo "✏️  Applying fix to Architecture Diagram..."
+# Note: Filename contains Unicode U+2010 HYPHEN character (‐), not ASCII hyphen (-)
 TARGET_FILE="Architecture‐Diagram.md.md"
+TARGET_URL="https://github.com/onenoly1010/quantum-pi-forge-site/wiki/Architecture%E2%80%90Diagram"
 cp "wiki-fixes/Architecture-Diagram-FIXED.md" "$WIKI_DIR/$TARGET_FILE"
 
 # Show the changes
@@ -62,7 +64,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     git push origin master
     echo ""
     echo "✅ Fix applied successfully!"
-    echo "🌐 View the updated page at: https://github.com/onenoly1010/quantum-pi-forge-site/wiki/Architecture%E2%80%90Diagram"
+    echo "🌐 View the updated page at: $TARGET_URL"
 else
     echo "⏸️  Changes not committed. You can review them in $WIKI_DIR"
 fi
