@@ -29,7 +29,7 @@
       "dest": "/api/$1"
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|svg|ico|json))",
+      "src": "/(.*\\.(css|js|png|jpg|svg|ico|json|woff|woff2|ttf|eot|otf))",
       "dest": "/$1"
     },
     {
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js|png|jpg|svg|ico))",
+      "source": "/(.*\\.(css|js|png|jpg|svg|ico|woff|woff2|ttf|eot|otf))",
       "headers": [
         {
           "key": "Cache-Control",
