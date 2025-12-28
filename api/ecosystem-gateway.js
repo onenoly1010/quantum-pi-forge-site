@@ -29,9 +29,23 @@ export const ECOSYSTEM_SERVICES = {
   contracts: {
     name: 'Smart Contracts',
     network: '0G Aristotle Mainnet',
-    chainId: '0x29a',
-    rpcUrl: 'https://rpc-testnet.0g.ai',
-    description: '0G Aristotle Mainnet configuration'
+    chainId: '16661', // String for consistency with Web3 libraries
+    chainIdHex: '0x4115',
+    rpcUrl: 'https://evmrpc.0g.ai',
+    // Note: No mainnet fallback RPC publicly available yet
+    // Check https://docs.0g.ai for additional endpoints
+    blockExplorer: 'https://chainscan.0g.ai',
+    currencySymbol: '0G',
+    currencyDecimals: 18,
+    description: '0G Aristotle Mainnet configuration',
+    // DEX Router Configuration
+    // TODO: Update with actual router address after resolution
+    router: {
+      address: '0x0000000000000000000000000000000000000000',
+      type: 'uniswap_v2',
+      verified: false,
+      note: 'Pending router address resolution - see .env.launch and DEPLOYMENT_GUIDE.md'
+    }
   }
 };
 

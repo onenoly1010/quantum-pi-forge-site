@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment (keep .env.launch but ignore others)
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+dist/
+build/
+*.log
+
+# Temporary files
+*.tmp
+.cache/
+
+# Deployment artifacts (if using Foundry/Hardhat for router deployment)
+cache/
+out/
+artifacts/
+typechain/
+typechain-types/
+
+# Private keys (IMPORTANT: Never commit private keys)
+*.key
+*.pem
+secrets/
+private/
