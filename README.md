@@ -290,4 +290,61 @@ Contributions are welcome! To contribute:
 
 ---
 
+## 🚀 Deployment
+
+### Vercel Deployment
+
+This site is deployed on Vercel with custom domain configuration.
+
+**Live URL:** https://quantumpiforge.com
+
+#### Deploy Your Own
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/onenoly1010/quantum-pi-forge-site)
+
+#### Manual Deployment
+
+1. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+
+2. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+
+3. Deploy to production:
+   ```bash
+   vercel --prod
+   ```
+
+#### Custom Domain Setup
+
+1. Go to Vercel Dashboard → Project Settings → Domains
+2. Add domain: `quantumpiforge.com`
+3. Add domain: `www.quantumpiforge.com`
+4. Configure DNS records at your registrar:
+   ```
+   Type: CNAME
+   Name: @
+   Value: cname.vercel-dns.com
+   
+   Type: CNAME
+   Name: www
+   Value: cname.vercel-dns.com
+   ```
+
+5. Wait for DNS propagation (5-48 hours, typically faster)
+
+#### Environment Variables
+
+No environment variables required for static deployment.
+
+If using API routes, configure in Vercel Dashboard:
+- `NEXT_PUBLIC_BACKEND_URL`: Backend API URL
+- `NEXT_PUBLIC_RAILWAY_URL`: Railway backend endpoint
+
+---
+
 **Powered by OINIO | Where Consciousness Meets Code**

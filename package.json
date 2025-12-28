@@ -1,0 +1,25 @@
+{
+  "name": "quantum-pi-forge-site",
+  "version": "1.0.0",
+  "description": "Quantum Pi Forge Landing Site - Deployed on Vercel",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "node -e \"console.log('Static site - no build needed')\"",
+    "deploy": "vercel --prod",
+    "deploy-preview": "vercel"
+  },
+  "keywords": [
+    "quantum",
+    "pi-network",
+    "blockchain",
+    "vercel"
+  ],
+  "author": "onenoly1010",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onenoly1010/quantum-pi-forge-site.git"
+  },
+  "homepage": "https://quantumpiforge.com"
+}
