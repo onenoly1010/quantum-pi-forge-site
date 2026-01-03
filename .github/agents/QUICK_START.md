@@ -5,7 +5,7 @@
 **Before starting ANY task**, complete these 3 steps:
 
 ### Step 1: Read Onboarding (15 min)
-📖 **[.github/agents/ONBOARDING.md](.github/agents/ONBOARDING.md)**
+📖 **[ONBOARDING.md](ONBOARDING.md)**
 
 Key takeaways:
 - Quantum Pi Forge = 6 interconnected services
@@ -14,7 +14,7 @@ Key takeaways:
 - This site = Central gateway + Live dashboard
 
 ### Step 2: Review Instructions (5 min)  
-📋 **[.github/agents/AGENT_INSTRUCTIONS.md](.github/agents/AGENT_INSTRUCTIONS.md)**
+📋 **[AGENT_INSTRUCTIONS.md](AGENT_INSTRUCTIONS.md)**
 
 Key takeaways:
 - Task execution order
@@ -113,9 +113,9 @@ const metrics = await getEcosystemMetrics();
 ## 📚 Complete Documentation
 
 For full details, see:
-- **[ONBOARDING.md](.github/agents/ONBOARDING.md)** - Complete guide
-- **[AGENT_INSTRUCTIONS.md](.github/agents/AGENT_INSTRUCTIONS.md)** - Detailed instructions
-- **[agents/README.md](.github/agents/README.md)** - Directory overview
+- **[ONBOARDING.md](ONBOARDING.md)** - Complete guide
+- **[AGENT_INSTRUCTIONS.md](AGENT_INSTRUCTIONS.md)** - Detailed instructions
+- **[README.md](README.md)** - Directory overview
 
 ---
 
