@@ -1,0 +1,99 @@
+name: Agent Onboarding Reminder
+
+on:
+  issues:
+    types: [opened, assigned]
+  pull_request:
+    types: [opened, assigned]
+
+jobs:
+  onboarding-reminder:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Post Onboarding Reminder
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const message = `## 🤖 Coding Agent Onboarding Required
+            
+            **⚠️ MANDATORY: Complete onboarding before starting work ⚠️**
+            
+            All coding agents must complete onboarding before working on this ${context.eventName === 'issues' ? 'issue' : 'pull request'}.
+            
+            ### 📚 Required Reading (in order):
+            
+            1. **[ONBOARDING.md](.github/agents/ONBOARDING.md)** - Ecosystem overview, OINIO philosophy, development workflow (15-20 min)
+            2. **[AGENT_INSTRUCTIONS.md](.github/agents/AGENT_INSTRUCTIONS.md)** - Task execution guidelines and quick reference (5-10 min)
+            3. **[README.md](README.md)** - Technical architecture and API documentation (10-15 min)
+            
+            ### 🎯 Why This Matters:
+            
+            Quantum Pi Forge is a comprehensive ecosystem with:
+            - 6 interconnected services
+            - OINIO philosophical framework
+            - Sacred Trinity Architecture pattern
+            - Real-time integrations with production services
+            
+            Understanding this context ensures:
+            - ✅ High-quality contributions
+            - ✅ Consistency across the ecosystem
+            - ✅ No breaking changes to live services
+            - ✅ Alignment with project philosophy
+            
+            ### ✅ Onboarding Checklist:
+            
+            Complete these steps before starting work:
+            
+            - [ ] Read \`.github/agents/ONBOARDING.md\` thoroughly
+            - [ ] Read \`.github/agents/AGENT_INSTRUCTIONS.md\`
+            - [ ] Review the main \`README.md\`
+            - [ ] Understand the 6 services in the ecosystem
+            - [ ] Understand the OINIO philosophy
+            - [ ] Set up local development environment
+            - [ ] Test the site locally
+            - [ ] Review code style guidelines
+            - [ ] Understand the API gateway
+            - [ ] Complete the onboarding verification quiz (in your mind)
+            
+            ### 🚀 Once Complete:
+            
+            After completing onboarding, you'll be ready to:
+            - Make meaningful contributions
+            - Understand the broader context
+            - Follow established patterns
+            - Maintain ecosystem integrity
+            
+            ### 📖 Quick Links:
+            
+            - [Onboarding Guide](.github/agents/ONBOARDING.md)
+            - [Agent Instructions](.github/agents/AGENT_INSTRUCTIONS.md)
+            - [Agents Directory README](.github/agents/README.md)
+            - [Main README](README.md)
+            - [Live Site](https://onenoly1010.github.io/quantum-pi-forge-site/)
+            - [Live Dashboard](https://onenoly1010.github.io/quantum-pi-forge-site/dashboard.html)
+            
+            ---
+            
+            **Powered by OINIO | Where Consciousness Meets Code 🌌**
+            
+            *This is an automated reminder. Once you've completed onboarding, you're ready to begin!*`;
+            
+            if (context.eventName === 'issues') {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            } else if (context.eventName === 'pull_request') {
+              github.rest.issues.createComment({
+                issue_number: context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            }
