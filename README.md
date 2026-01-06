@@ -38,6 +38,8 @@
 
 # Quantum Pi Forge - Landing Site
 
+> **🤖 For Coding Agents**: Complete the [mandatory onboarding](.github/agents/ONBOARDING.md) before starting any work on this repository. See [Agent Instructions](.github/agents/AGENT_INSTRUCTIONS.md) for details.
+
 ## 🌐 Live Site
 
 🔗 **[https://onenoly1010.github.io/quantum-pi-forge-site/](https://onenoly1010.github.io/quantum-pi-forge-site/)**
@@ -267,13 +269,34 @@ The site is deployed via **GitHub Pages**:
 
 Contributions are welcome! To contribute:
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Make your changes
-4. Test locally
-5. Commit: `git commit -m "Add your feature"`
-6. Push: `git push origin feature/your-feature`
-7. Open a Pull Request
+### For Coding Agents 🤖
+
+**REQUIRED**: Before starting any work, complete the [onboarding process](.github/agents/ONBOARDING.md):
+
+1. **Read**: [ONBOARDING.md](.github/agents/ONBOARDING.md) - Ecosystem overview and philosophy (15-20 min)
+2. **Review**: [AGENT_INSTRUCTIONS.md](.github/agents/AGENT_INSTRUCTIONS.md) - Task execution guidelines (5-10 min)
+3. **Study**: This README - Technical architecture and API docs (10-15 min)
+
+The onboarding ensures you understand the Quantum Pi Forge ecosystem, OINIO philosophy, and development workflows.
+
+### For All Contributors
+
+1. **Complete onboarding** (if you're a coding agent)
+2. Fork the repository
+3. Create a feature branch: `git checkout -b feature/your-feature`
+4. Make your changes
+5. Test locally (see [Local Development](#-local-development))
+6. Commit: `git commit -m "Add your feature"`
+7. Push: `git push origin feature/your-feature`
+8. Open a Pull Request
+
+### Contribution Guidelines
+
+- **Minimal Changes**: Make the smallest changes necessary to achieve your goal
+- **Test Thoroughly**: Run the site locally and test in multiple browsers
+- **Follow Patterns**: Use existing code styles and design patterns
+- **Document**: Update docs if your changes affect usage or architecture
+- **No Breaking Changes**: Don't break integrations with live production services
 
 ## 📄 License
 
