@@ -270,10 +270,21 @@ Contributions are welcome! To contribute:
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature`
 3. Make your changes
-4. Test locally
-5. Commit: `git commit -m "Add your feature"`
-6. Push: `git push origin feature/your-feature`
-7. Open a Pull Request
+4. **Run automated checks**: `npm install && npm run lint && npm test`
+5. Test locally
+6. Commit: `git commit -m "Add your feature"`
+7. Push: `git push origin feature/your-feature`
+8. Open a Pull Request
+
+### Code Quality & Automation
+
+We use automated checks to ensure code quality and accessibility:
+
+- **ESLint**: JavaScript code quality
+- **HTMLHint**: HTML validation and accessibility
+- **Custom Tests**: Validate code review fixes (retry delays, aria-labels)
+
+See [AUTOMATION.md](AUTOMATION.md) for details on the automated checks and how to run them locally.
 
 ## 📄 License
 

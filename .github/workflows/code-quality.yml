@@ -1,0 +1,53 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [ main, develop, 'copilot/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-and-validate:
+    name: Lint and Validate Code
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci || npm install
+      
+      - name: Run ESLint
+        run: npm run lint:js
+        continue-on-error: false
+      
+      - name: Run HTMLHint
+        run: npm run lint:html
+        continue-on-error: false
+      
+      - name: Validate Code Review Fixes
+        run: npm test
+        continue-on-error: false
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Code Quality Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All automated checks completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This workflow validates:" >> $GITHUB_STEP_SUMMARY
+          echo "- JavaScript code quality (ESLint)" >> $GITHUB_STEP_SUMMARY
+          echo "- HTML accessibility (HTMLHint)" >> $GITHUB_STEP_SUMMARY
+          echo "- Code review fixes from commit 096fdab" >> $GITHUB_STEP_SUMMARY
+          echo "  - Retry delay cap (5000ms)" >> $GITHUB_STEP_SUMMARY
+          echo "  - aria-label on interactive elements" >> $GITHUB_STEP_SUMMARY

@@ -13,10 +13,7 @@ function updateCountdown() {
   if (timeRemaining <= 0) {
     // Launch has happened - clear interval and display zeros
     clearInterval(countdownInterval);
-    document.getElementById('days').textContent = '00';
-    document.getElementById('hours').textContent = '00';
-    document.getElementById('minutes').textContent = '00';
-    document.getElementById('seconds').textContent = '00';
+    updateCountdownElements('00', '00', '00', '00');
     return;
   }
   
@@ -27,10 +24,36 @@ function updateCountdown() {
   const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
   
   // Update DOM with padded values
-  document.getElementById('days').textContent = String(days).padStart(2, '0');
-  document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-  document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-  document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  const paddedDays = String(days).padStart(2, '0');
+  const paddedHours = String(hours).padStart(2, '0');
+  const paddedMinutes = String(minutes).padStart(2, '0');
+  const paddedSeconds = String(seconds).padStart(2, '0');
+  
+  updateCountdownElements(paddedDays, paddedHours, paddedMinutes, paddedSeconds);
+}
+
+function updateCountdownElements(days, hours, minutes, seconds) {
+  // Update banner countdown
+  const bannerDays = document.getElementById('bannerDays');
+  const bannerHours = document.getElementById('bannerHours');
+  const bannerMinutes = document.getElementById('bannerMinutes');
+  const bannerSeconds = document.getElementById('bannerSeconds');
+  
+  if (bannerDays) bannerDays.textContent = days;
+  if (bannerHours) bannerHours.textContent = hours;
+  if (bannerMinutes) bannerMinutes.textContent = minutes;
+  if (bannerSeconds) bannerSeconds.textContent = seconds;
+  
+  // Update hero countdown
+  const heroDays = document.getElementById('heroDays');
+  const heroHours = document.getElementById('heroHours');
+  const heroMinutes = document.getElementById('heroMinutes');
+  const heroSeconds = document.getElementById('heroSeconds');
+  
+  if (heroDays) heroDays.textContent = days;
+  if (heroHours) heroHours.textContent = hours;
+  if (heroMinutes) heroMinutes.textContent = minutes;
+  if (heroSeconds) heroSeconds.textContent = seconds;
 }
 
 // Update countdown immediately and then every second
@@ -42,9 +65,9 @@ countdownInterval = setInterval(updateCountdown, 1000);
 // ========================================
 
 document.querySelectorAll("a[href^='#']").forEach(link => {
-  link.addEventListener("click", function (e) {
+  link.addEventListener('click', function (e) {
     e.preventDefault();
-    const targetId = this.getAttribute("href");
+    const targetId = this.getAttribute('href');
     const targetElement = document.querySelector(targetId);
     
     if (targetElement) {
@@ -54,7 +77,7 @@ document.querySelectorAll("a[href^='#']").forEach(link => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: 'smooth'
       });
     }
   });
@@ -64,7 +87,6 @@ document.querySelectorAll("a[href^='#']").forEach(link => {
 // HEADER SCROLL EFFECT
 // ========================================
 
-let lastScroll = 0;
 const header = document.querySelector('.header');
 
 window.addEventListener('scroll', () => {
@@ -75,8 +97,6 @@ window.addEventListener('scroll', () => {
   } else {
     header.classList.remove('scrolled');
   }
-  
-  lastScroll = currentScroll;
 });
 
 // ========================================
