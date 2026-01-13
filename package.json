@@ -1,0 +1,27 @@
+{
+  "name": "quantum-pi-forge-site",
+  "version": "1.0.0",
+  "description": "Quantum Pi Forge Genesis - Landing Site with automated code quality checks",
+  "scripts": {
+    "lint:js": "eslint '**/*.js' --ignore-pattern 'node_modules/'",
+    "lint:html": "htmlhint '**/*.html'",
+    "lint": "npm run lint:js && npm run lint:html",
+    "test": "node tests/validate-fixes.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onenoly1010/quantum-pi-forge-site.git"
+  },
+  "keywords": [
+    "quantum",
+    "pi-forge",
+    "blockchain",
+    "web3"
+  ],
+  "author": "OINIO",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "htmlhint": "^1.1.4"
+  }
+}
