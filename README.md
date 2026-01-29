@@ -324,34 +324,24 @@ The site is deployed via **GitHub Pages**:
 
 Contributions are welcome! To contribute:
 
-### For Coding Agents 🤖
-
-**REQUIRED**: Before starting any work, complete the [onboarding process](.github/agents/ONBOARDING.md):
-
-1. **Read**: [ONBOARDING.md](.github/agents/ONBOARDING.md) - Ecosystem overview and philosophy (15-20 min)
-2. **Review**: [AGENT_INSTRUCTIONS.md](.github/agents/AGENT_INSTRUCTIONS.md) - Task execution guidelines (5-10 min)
-3. **Study**: This README - Technical architecture and API docs (10-15 min)
-
-The onboarding ensures you understand the Quantum Pi Forge ecosystem, OINIO philosophy, and development workflows.
-
-### For All Contributors
-
-1. **Complete onboarding** (if you're a coding agent)
-2. Fork the repository
-3. Create a feature branch: `git checkout -b feature/your-feature`
-4. Make your changes
-5. Test locally (see [Local Development](#-local-development))
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes
+4. **Run automated checks**: `npm install && npm run lint && npm test`
+5. Test locally
 6. Commit: `git commit -m "Add your feature"`
 7. Push: `git push origin feature/your-feature`
 8. Open a Pull Request
 
-### Contribution Guidelines
+### Code Quality & Automation
 
-- **Minimal Changes**: Make the smallest changes necessary to achieve your goal
-- **Test Thoroughly**: Run the site locally and test in multiple browsers
-- **Follow Patterns**: Use existing code styles and design patterns
-- **Document**: Update docs if your changes affect usage or architecture
-- **No Breaking Changes**: Don't break integrations with live production services
+We use automated checks to ensure code quality and accessibility:
+
+- **ESLint**: JavaScript code quality
+- **HTMLHint**: HTML validation and accessibility
+- **Custom Tests**: Validate code review fixes (retry delays, aria-labels)
+
+See [AUTOMATION.md](AUTOMATION.md) for details on the automated checks and how to run them locally.
 
 ## 📄 License
 
