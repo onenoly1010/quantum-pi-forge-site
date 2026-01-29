@@ -38,6 +38,8 @@
 
 # Quantum Pi Forge - Landing Site
 
+> **🤖 For Coding Agents**: Complete the [mandatory onboarding](.github/agents/ONBOARDING.md) before starting any work on this repository. See [Agent Instructions](.github/agents/AGENT_INSTRUCTIONS.md) for details.
+
 ## 🌐 Live Site
 
 🔗 **[https://onenoly1010.github.io/quantum-pi-forge-site/](https://onenoly1010.github.io/quantum-pi-forge-site/)**
@@ -77,7 +79,11 @@ The site integrates with multiple live services:
    - **URL**: https://quantum-pi-forge-fixed.vercel.app
    - **Type**: Uniswap V2 DEX on 0G Aristotle Mainnet
    - **Endpoints**: `/api/health`, `/dashboard`
-   - **Status**: Production
+   - **Network**: Chain ID 16661 (0x4115)
+   - **RPC**: https://evmrpc.0g.ai
+   - **Explorer**: https://chainscan.0g.ai
+   - **Router Config**: See `.env.launch` and `DEPLOYMENT_GUIDE.md`
+   - **Status**: Production (Router Configuration Pending)
 
 4. **Pi MR NFT System** 🎨
    - **Repos**: [Contracts](https://github.com/onenoly1010/Pi-MR-NFT-contracts), [Agent](https://github.com/onenoly1010/Pi-MR-NFT-Agent)
@@ -161,6 +167,57 @@ The **Genesis Launch Dashboard** (`dashboard.html`) features:
 - **Countdown Timer**: Real-time countdown to Genesis launch
 - **Hover Effects**: Cards lift and glow on hover
 - **Status Animations**: Pulsing status indicators
+
+## ⚙️ 0G DEX Router Configuration
+
+### Critical Launch Blocker Resolution
+
+The OINIO flash-launch system requires configuration of the `ZERO_G_UNIVERSAL_ROUTER` address for 0G Aristotle Mainnet.
+
+### Configuration Files
+
+1. **`.env.launch`** - Main configuration file containing:
+   - 0G Aristotle Mainnet network parameters (Chain ID: 16661)
+   - DEX router address (to be updated)
+   - Launch system configuration
+   - Safety checks and verification flags
+
+2. **`DEPLOYMENT_GUIDE.md`** - Comprehensive guide for:
+   - Finding canonical DEX router on 0G network
+   - Deploying Uniswap V2 fork if needed
+   - Testing and verification procedures
+   - Troubleshooting common issues
+
+### Quick Start
+
+**Option A: Using Canonical Router (Preferred)**
+```bash
+# 1. Find router address via 0G Discord/Docs/Explorer
+# 2. Update .env.launch:
+ZERO_G_UNIVERSAL_ROUTER=0x[CANONICAL_ADDRESS]
+ROUTER_ADDRESS_VERIFIED=true
+```
+
+**Option B: Deploy Own Router (Fallback)**
+```bash
+# 1. Follow DEPLOYMENT_GUIDE.md
+# 2. Deploy Uniswap V2 Factory + Router to 0G Aristotle
+# 3. Update .env.launch with deployed address
+# 4. Test swap functionality
+# 5. Mark verification flags as true
+```
+
+### Network Details
+- **Network**: 0G Aristotle Mainnet
+- **Chain ID**: 16661 (0x4115 hex)
+- **RPC**: https://evmrpc.0g.ai
+- **Explorer**: https://chainscan.0g.ai
+- **Currency**: 0G (18 decimals)
+
+### Resources
+- **0G Discord**: https://discord.gg/0gnetwork
+- **0G Docs**: https://docs.0g.ai
+- **Deployment Guide**: See `DEPLOYMENT_GUIDE.md`
 
 ## 🚀 Local Development
 
@@ -298,6 +355,63 @@ See [AUTOMATION.md](AUTOMATION.md) for details on the automated checks and how t
 - **Genesis Backend**: https://pi-forge-quantum-genesis.railway.app
 - **Resonance Engine**: https://quantum-resonance-clean.vercel.app
 - **DEX**: https://quantum-pi-forge-fixed.vercel.app
+
+---
+
+## 🚀 Deployment
+
+### Vercel Deployment
+
+This site is deployed on Vercel with custom domain configuration.
+
+**Live URL:** https://quantumpiforge.com
+
+#### Deploy Your Own
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/onenoly1010/quantum-pi-forge-site)
+
+#### Manual Deployment
+
+1. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+
+2. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+
+3. Deploy to production:
+   ```bash
+   vercel --prod
+   ```
+
+#### Custom Domain Setup
+
+1. Go to Vercel Dashboard → Project Settings → Domains
+2. Add domain: `quantumpiforge.com`
+3. Add domain: `www.quantumpiforge.com`
+4. Configure DNS records at your registrar:
+   ```
+   Type: CNAME
+   Name: @
+   Value: cname.vercel-dns.com
+   
+   Type: CNAME
+   Name: www
+   Value: cname.vercel-dns.com
+   ```
+
+5. Wait for DNS propagation (5-48 hours, typically faster)
+
+#### Environment Variables
+
+No environment variables required for static deployment.
+
+If using API routes, configure in Vercel Dashboard:
+- `NEXT_PUBLIC_BACKEND_URL`: Backend API URL
+- `NEXT_PUBLIC_RAILWAY_URL`: Railway backend endpoint
 
 ---
 
