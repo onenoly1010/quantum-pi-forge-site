@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🏗️ Pi Forge Quantum Genesis - Main Repository
+    url: https://github.com/onenoly1010/pi-forge-quantum-genesis
+    about: Visit the main Genesis backend repository
+  - name: 🛡️ Guardian HQ - Issue #100
+    url: https://github.com/onenoly1010/pi-forge-quantum-genesis/issues/100
+    about: Guardian system headquarters and documentation
+  - name: 💬 Community Discussions
+    url: https://github.com/onenoly1010/quantum-pi-forge-site/discussions
+    about: Ask questions and discuss with the community
