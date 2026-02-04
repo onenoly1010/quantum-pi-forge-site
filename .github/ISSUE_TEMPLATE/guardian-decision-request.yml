@@ -1,0 +1,258 @@
+name: 🛡️ Guardian Decision Request
+description: Request Guardian oversight for critical system decisions requiring human approval
+title: "[Guardian Decision]: "
+labels: ["guardian", "decision-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🛡️ Guardian Decision Request
+        
+        This form is used to request Guardian approval for critical system decisions that require human oversight.
+        
+        Please provide detailed information to help the Guardian make an informed decision.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Decision Information
+
+  - type: input
+    id: decision-id
+    attributes:
+      label: Decision ID
+      description: Auto-generated or reference ID for this decision
+      placeholder: e.g., DEC-2026-02-001
+    validations:
+      required: false
+
+  - type: dropdown
+    id: decision-type
+    attributes:
+      label: Decision Type
+      description: Select the type of decision being requested
+      options:
+        - Deployment
+        - Scaling
+        - Rollback
+        - Healing
+        - Monitoring
+        - Override
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this decision?
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: input
+    id: confidence-score
+    attributes:
+      label: Confidence Score
+      description: AI confidence level for this decision (0.0 - 1.0)
+      placeholder: e.g., 0.85
+    validations:
+      required: false
+
+  - type: input
+    id: requested-by
+    attributes:
+      label: Requested By
+      description: System or user requesting this decision
+      placeholder: e.g., Genesis System / @username
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Decision Summary
+
+  - type: textarea
+    id: action-requested
+    attributes:
+      label: What action is being requested?
+      description: Provide a clear, concise description of the proposed action
+      placeholder: Describe the action that requires Guardian approval...
+    validations:
+      required: true
+
+  - type: textarea
+    id: approval-reason
+    attributes:
+      label: Why is Guardian approval needed?
+      description: Explain why this decision requires human oversight
+      placeholder: e.g., confidence below threshold, high impact, critical system change...
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Context & Analysis
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Current State
+      description: Describe the current system state, metrics, or conditions that led to this decision request
+      placeholder: Provide details about current conditions, metrics, and system state...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed Change
+      description: Detail what will change if this decision is approved
+      placeholder: Describe the specific changes that will be implemented...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: safety-impact
+    attributes:
+      label: Safety Impact
+      description: Assess the safety impact of this decision
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: textarea
+    id: blast-radius
+    attributes:
+      label: Blast Radius
+      description: Describe potential scope of impact if something goes wrong
+      placeholder: What systems/services could be affected? How many users?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reversibility
+    attributes:
+      label: Reversibility
+      description: Can this action be easily rolled back?
+      options:
+        - "Yes"
+        - "No"
+        - "Partial"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: data-risk
+    attributes:
+      label: Data Risk
+      description: Is there any risk to data integrity?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: supporting-data
+    attributes:
+      label: Supporting Data
+      description: Provide relevant metrics, recent history, and dependencies
+      placeholder: |
+        - Relevant metrics: [key performance indicators]
+        - Recent history: [related events or patterns]
+        - Dependencies: [affected systems/services]
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Decision Criteria Review
+
+  - type: checkboxes
+    id: safety-checklist
+    attributes:
+      label: Safety Checklist
+      description: Verify safety considerations
+      options:
+        - label: No security risks identified
+        - label: No stability concerns
+        - label: Data integrity preserved
+        - label: Rollback plan exists (if applicable)
+
+  - type: checkboxes
+    id: impact-assessment
+    attributes:
+      label: Impact Assessment
+      description: Verify impact has been assessed
+      options:
+        - label: Impact scope documented
+        - label: User impact assessed
+        - label: Financial impact calculated
+        - label: Recovery plan defined
+
+  - type: checkboxes
+    id: approval-criteria
+    attributes:
+      label: Approval Criteria
+      description: Verify approval requirements
+      options:
+        - label: Tests passed (if deployment)
+        - label: Metrics justify action (if scaling)
+        - label: Root cause known (if rollback/healing)
+        - label: Cost acceptable
+        - label: No active incidents
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Reference Information
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Any additional context, concerns, or information
+      placeholder: Add any other relevant information for the Guardian...
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Reference Links
+        
+        - [Guardian Playbook](https://github.com/onenoly1010/pi-forge-quantum-genesis/wiki/Guardian-Playbook)
+        - [Guardian Quick Reference](https://github.com/onenoly1010/pi-forge-quantum-genesis/wiki/Guardian-Quick-Reference)
+        - [Guardian HQ - Issue #100](https://github.com/onenoly1010/pi-forge-quantum-genesis/issues/100)
+        
+        ---
+        
+        ### Next Steps
+        
+        After submitting this request:
+        1. Guardian will review the decision request
+        2. Guardian will provide a decision (Approve/Reject/Escalate/Need More Info)
+        3. If approved, the action will be executed
+        4. Results will be verified and documented
+        
+        ---
+        
+        _Originally inspired by [pi-forge-quantum-genesis#291](https://github.com/onenoly1010/pi-forge-quantum-genesis/issues/291)_
