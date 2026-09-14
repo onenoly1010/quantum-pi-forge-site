@@ -1,0 +1,35 @@
+name: "Verification request \U0001F50D"
+description: "Request a $2 QPF independent verification of your file."
+title: "[verification-request] verify my file"
+labels: ["verification-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## What you get
+        For **$2.00** (pay AFTER an ESTABLISHED verdict — FAILED = $0), QPF
+        returns a hash-chained evidence package any third party can re-check:
+        artifact SHA-256, byte size, every check result, verdict, UTC timestamp.
+  - type: textarea
+    id: artifact
+    attributes:
+      label: "Your artifact"
+      description: "Attach the file, or paste a public link to it."
+      placeholder: "Attach file or paste link…"
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: "What should we prove about it?"
+      description: "Plain language. Example: file contains SPDX-License-Identifier MIT."
+      placeholder: "Describe the claim in a sentence or two…"
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: "Terms"
+      options:
+        - label: "I understand payment ($2 standard / $5 expedited) is due only after an ESTABLISHED verdict, by crypto tx hash (or PayPal/Stripe/bank ref as fallback)."
+          required: true
