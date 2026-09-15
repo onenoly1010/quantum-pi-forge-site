@@ -2,7 +2,7 @@ name: GitHub Pages
 
 on:
   push:
-    branches: ["copilot/add-custom-domain-setup"]
+    branches: ["copilot/add-custom-domain-setup", "main"]
   workflow_dispatch:
 
 permissions:

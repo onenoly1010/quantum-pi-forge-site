@@ -1,425 +1,204 @@
 /**
- * QPF Birth Experience - Client-Side JavaScript
- * 
- * "Watch Your AI Come To Life"
- * 
- * Frontend experience layer. The API is the protocol reality.
- * Every state transition corresponds to a real backend event.
- * 
+ * QPF Birth Experience - Client-Side (v0.2.0 static-site edition)
+ * Runs 100% in the browser: QPFBirth protocol + localStorage + optional live 0G RPC read.
+ * No server required. No fabricated chain facts.
  * LIMITLESS | TRUTH
  */
-
-const BirthExperience = {
-  currentState: 'intro',
-  birthId: null,
-  identityId: null,
-  apiBase: '/api/birth',
-  
-  init() {
-    this.cacheElements();
-    this.bindEvents();
-    this.showState('intro');
-    console.log('[QPF Birth] Experience initialized');
-    console.log('[QPF Birth] Flow: IDLE → AUTH → CREATE → ATTEST → VERIFY → MEET');
-  },
-  
-  cacheElements() {
-    this.elements = {
-      views: {
-        intro: document.getElementById('state-intro'),
-        auth: document.getElementById('state-auth'),
-        authorized: document.getElementById('state-authorized'),
-        creating: document.getElementById('state-creating'),
-        identityCreated: document.getElementById('state-identity-created'),
-        attesting: document.getElementById('state-attesting'),
-        verified: document.getElementById('state-verified'),
-        ready: document.getElementById('state-ready'),
-        error: document.getElementById('state-error'),
-        incomplete: document.getElementById('state-incomplete'),
-      },
-      buttons: {
-        begin: document.getElementById('btn-begin'),
-        passkey: document.getElementById('btn-passkey'),
-        simulated: document.getElementById('btn-simulated'),
-        create: document.getElementById('btn-create'),
-        attest: document.getElementById('btn-attest'),
-        viewProof: document.getElementById('btn-view-proof'),
-        chat: document.getElementById('btn-chat'),
-        retry: document.getElementById('btn-retry'),
-        retryAttest: document.getElementById('btn-retry-attest'),
-        meetAnyway: document.getElementById('btn-meet-anyway'),
-      },
-      displays: {
-        commitmentCode: document.getElementById('commitment-code'),
-        newIdentityId: document.getElementById('new-identity-id'),
-        newIdentityTime: document.getElementById('new-identity-time'),
-        identityIdDisplay: document.getElementById('identity-id-display'),
-        verifiedTime: document.getElementById('verified-time'),
-        verifiedIdentity: document.getElementById('verified-identity'),
-        meetIdentity: document.getElementById('meet-identity'),
-        errorMessage: document.getElementById('error-message'),
-        errorDetails: document.getElementById('error-details'),
-      },
-      progress: {
-        fillAuth: document.getElementById('progress-fill-auth'),
-        fillAuthz: document.getElementById('progress-fill-authz'),
-        fillCreating: document.getElementById('progress-fill-creating'),
-        fillAttesting: document.getElementById('progress-fill-attesting'),
-      },
-      steps: {
-        identity: document.getElementById('step-identity'),
-        memory: document.getElementById('step-memory'),
-        boundaries: document.getElementById('step-boundaries'),
-        verification: document.getElementById('step-verification'),
-      },
-      authStatus: document.getElementById('auth-status'),
+(function () {
+  'use strict';
+  var OG_RPC = 'https://evmrpc.0g.ai';
+  var OG_CHAIN_ID = 16661;
+  var OG_EXPLORER_TX = 'https://chainscan.0g.ai/tx/';
+  var storage = new QPFBirth.BirthStorage('qpf_birth_v1');
+  var protocol = new QPFBirth.BirthProtocol(storage);
+  var S = QPFBirth.BirthState;
+  var currentBirthId = null;
+  try { currentBirthId = localStorage.getItem('qpf_birth_current') || null; } catch (e) {}
+  function $(id) { return document.getElementById(id); }
+  function els() {
+    return {
+      views: { intro: $('state-intro'), auth: $('state-auth'), authorized: $('state-authorized'),
+        creating: $('state-creating'), identityCreated: $('state-identity-created'),
+        attesting: $('state-attesting'), verified: $('state-verified'),
+        ready: $('state-ready'), error: $('state-error'), incomplete: $('state-incomplete') },
+      btn: { begin: $('btn-begin'), passkey: $('btn-passkey'), simulated: $('btn-simulated'),
+        create: $('btn-create'), attest: $('btn-attest'), viewProof: $('btn-view-proof'),
+        chat: $('btn-chat'), retry: $('btn-retry'), retryAttest: $('btn-retry-attest'),
+        meetAnyway: $('btn-meet-anyway') },
+      d: { commitmentCode: $('commitment-code'), newIdentityId: $('new-identity-id'),
+        newIdentityTime: $('new-identity-time'), identityIdDisplay: $('identity-id-display'),
+        verifiedTime: $('verified-time'), verifiedIdentity: $('verified-identity'), verifiedChain: $('verified-chain'),
+        meetIdentity: $('meet-identity'), errorMessage: $('error-message'),
+        errorDetails: $('error-details') },
+      authStatus: $('auth-status')
     };
-  },
-  
-  bindEvents() {
-    this.elements.buttons.begin.addEventListener('click', () => this.startBirth());
-    this.elements.buttons.passkey.addEventListener('click', () => this.authorizeWithPasskey());
-    this.elements.buttons.simulated.addEventListener('click', () => this.authorizeSimulated());
-    this.elements.buttons.create.addEventListener('click', () => this.createIdentity());
-    this.elements.buttons.attest.addEventListener('click', () => this.startAttestation());
-    this.elements.buttons.viewProof.addEventListener('click', () => this.viewProof());
-    this.elements.buttons.chat.addEventListener('click', () => this.startChat());
-    this.elements.buttons.retry.addEventListener('click', () => this.reset());
-    this.elements.buttons.retryAttest.addEventListener('click', () => this.startAttestation());
-    this.elements.buttons.meetAnyway.addEventListener('click', () => this.goToMeet());
-  },
-  
-  async apiCall(endpoint, options = {}) {
-    const url = `${this.apiBase}${endpoint}`;
-    const config = {
-      headers: { 'Content-Type': 'application/json' },
-      ...options,
-    };
-    
-    if (config.body) {
-      config.body = JSON.stringify(config.body);
-    }
-    
-    console.log(`[QPF Birth API] ${config.method || 'GET'} ${url}`);
-    
-    try {
-      const response = await fetch(url, config);
-      const data = await response.json();
-      
-      if (!response.ok) {
-        console.error(`[QPF Birth API] Error ${response.status}:`, data.error);
-        throw new Error(data.error || 'API error');
-      }
-      
-      return data;
-    } catch (error) {
-      console.error('[QPF Birth API] Request failed:', error);
-      throw error;
-    }
-  },
-  
-  async startBirth() {
-    try {
-      console.log('[QPF Birth] Starting new birth...');
-      const data = await this.apiCall('/', {
-        method: 'POST',
-        body: { birth_id: this.birthId },
+  }
+  var E = null;
+  function showState(name) {
+    var views = E.views;
+    Object.keys(views).forEach(function (k) { if (views[k]) views[k].classList.remove('active'); });
+    if (views[name]) views[name].classList.add('active');
+  }
+  function showError(title, message) {
+    E.d.errorMessage.textContent = title;
+    E.d.errorDetails.textContent = message || '';
+    showState('error');
+  }
+  function setCurrent(id) {
+    currentBirthId = id;
+    try { localStorage.setItem('qpf_birth_current', id); } catch (e) {}
+  }
+  function delay(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function rpcCall(method, params) {
+    return fetch(OG_RPC, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: method, params: params || [] }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.error) throw new Error(j.error.message || 'RPC error');
+        return j.result;
       });
-      
-      this.birthId = data.birth_id;
-      console.log(`[QPF Birth] Birth initiated: ${this.birthId}`);
-      
-      this.showState('auth');
-      this.updateProgress('auth', 0.1);
-    } catch (error) {
-      this.showError('Failed to start birth', error.message);
-    }
-  },
-  
-  async authorizeWithPasskey() {
-    this.showAuthStatus(true);
-    
-    try {
-      console.log('[QPF Birth] Attempting passkey authorization...');
-      
-      // Real WebAuthn would use navigator.credentials.create() here
-      // For demo, simulate the ceremony
-      await this.delay(1500);
-      
-      const data = await this.apiCall('/authorize', {
-        method: 'POST',
-        body: {
-          birth_id: this.birthId,
-          method: 'passkey_webauthn',
-          statement: 'I authorize the creation of a new QPF AI identity',
-        },
-      });
-      
-      this.birthId = data.birth_id;
-      this.showAuthStatus(false);
-      this.showState('authorized');
-      this.elements.displays.commitmentCode.textContent = data.birth_id;
-      this.updateProgress('authz', 0.25);
-      
-      console.log('[QPF Birth] Authorized via passkey');
-    } catch (error) {
-      this.showAuthStatus(false);
-      this.showError('Authorization failed', error.message);
-    }
-  },
-  
-  async authorizeSimulated() {
-    this.showAuthStatus(true);
-    
-    try {
-      console.log('[QPF Birth] Simulated authorization (demo mode)...');
-      
-      await this.delay(1000);
-      
-      const data = await this.apiCall('/authorize', {
-        method: 'POST',
-        body: {
-          birth_id: this.birthId,
-          method: 'simulated',
-          statement: 'I authorize the creation of a new QPF AI identity (demo)',
-        },
-      });
-      
-      this.birthId = data.birth_id;
-      this.showAuthStatus(false);
-      this.showState('authorized');
-      this.elements.displays.commitmentCode.textContent = data.birth_id;
-      this.updateProgress('authz', 0.25);
-      
-      console.log('[QPF Birth] Authorized (simulated)');
-    } catch (error) {
-      this.showAuthStatus(false);
-      this.showError('Authorization failed', error.message);
-    }
-  },
-  
-  async createIdentity() {
-    try {
-      console.log('[QPF Birth] Creating AI identity...');
-      this.showState('creating');
-      this.runCreationSequence();
-      
-      const data = await this.apiCall(`/${this.birthId}/create`, {
-        method: 'POST',
-      });
-      
-      this.identityId = data.identity_id;
-      console.log(`[QPF Birth] Identity created: ${this.identityId}`);
-      
-      this.elements.displays.newIdentityId.textContent = this.identityId;
-      this.elements.displays.newIdentityTime.textContent = new Date().toLocaleString();
-      this.elements.displays.identityIdDisplay.textContent = this.identityId;
-      
-      this.showState('identityCreated');
-      this.updateProgress('creating', 0.5);
-    } catch (error) {
-      this.showError('Identity creation failed', error.message);
-    }
-  },
-  
-  runCreationSequence() {
-    const steps = [
-      { el: this.elements.steps.identity, label: 'Creating identity' },
-      { el: this.elements.steps.memory, label: 'Establishing memory' },
-      { el: this.elements.steps.boundaries, label: 'Setting boundaries' },
-      { el: this.elements.steps.verification, label: 'Preparing verification' },
-    ];
-    
-    let delay = 0;
-    steps.forEach((step, index) => {
-      setTimeout(() => {
-        this.activateStep(step.el, step.label);
-      }, delay);
-      delay += 800;
+  }
+  function startBirth() {
+    protocol.initiate(currentBirthId).then(function (rec) {
+      setCurrent(rec.birth_id);
+      showState('auth');
+    }).catch(function (err) { showError('Failed to start birth', err.message); });
+  }
+  function doAuthorize(method) {
+    if (E.authStatus) E.authStatus.classList.remove('hidden');
+    delay(method === 'passkey_webauthn' ? 1200 : 700).then(function () {
+      var c = QPFBirth.createAuthorizationCommitment({ method: method,
+        statement: 'I authorize the creation of a new QPF AI identity' + (method === 'simulated' ? ' (demo)' : '') });
+      return protocol.authorize(currentBirthId, c);
+    }).then(function (rec) {
+      if (E.authStatus) E.authStatus.classList.add('hidden');
+      E.d.commitmentCode.textContent = rec.birth_id;
+      showState('authorized');
+    }).catch(function (err) {
+      if (E.authStatus) E.authStatus.classList.add('hidden');
+      showError('Authorization failed', err.message);
     });
-  },
-  
-  activateStep(element, label) {
-    const indicator = element.querySelector('.step-indicator');
-    const status = element.querySelector('.step-status');
-    
-    indicator.className = 'step-indicator active';
-    indicator.textContent = '◉';
-    status.textContent = 'active';
-    status.className = 'step-status active';
-    
-    console.log(`[QPF Birth] ${label}...`);
-    
-    setTimeout(() => {
-      indicator.className = 'step-indicator complete';
-      indicator.textContent = '✓';
-      status.textContent = 'complete';
-      status.className = 'step-status complete';
-    }, 600);
-  },
-  
-  async startAttestation() {
-    try {
-      console.log('[QPF Birth] Starting attestation to 0G Aristotle...');
-      this.showState('attesting');
-      this.updateProgress('attesting', 0.6);
-      
-      // Submit attestation via API
-      const data = await this.apiCall(`/${this.birthId}/attest`, {
-        method: 'POST',
-      });
-      
-      console.log(`[QPF Birth] Attestation submitted`);
-      console.log(`  Manifest hash: ${data.manifest_hash.slice(0, 16)}...`);
-      console.log(`  TxID: ${data.attestation?.txid || 'pending'}`);
-      console.log(`  Block: ${data.attestation?.block || 'pending'}`);
-      console.log(`  Network: ${data.attestation?.network || '0G Aristotle'}`);
-      
-      if (data.attestation?.simulated) {
-        console.log('  Note: Simulated attestation (demo mode)');
-      }
-      
-      // Wait for confirmation simulation
-      await this.delay(2000);
-      
-      // Move to verified state
-      const verifyData = await this.apiCall(`/${this.birthId}/verify`, {
-        method: 'POST',
-        body: {
-          txid: data.attestation?.txid,
-          block: data.attestation?.block,
-        },
-      });
-      
-      console.log('[QPF Birth] Verified on 0G Aristotle!');
-      
-      this.elements.displays.verifiedTime.textContent = new Date().toLocaleString();
-      this.elements.displays.verifiedIdentity.textContent = this.identityId;
-      
-      this.showState('verified');
-      this.updateProgress('attesting', 1);
-    } catch (error) {
-      console.error('[QPF Birth] Attestation failed:', error);
-      this.showError('Attestation failed', error.message);
-    }
-  },
-  
-  async viewProof() {
-    try {
-      const data = await this.apiCall(`/${this.birthId}/proof`);
-      
-      const proofText = [
-        '=== BIRTH PROOF ===',
-        ``,
-        `Birth ID: ${data.birth_id}`,
-        `State: ${data.state}`,
-        `Identity: ${data.ai_identity?.identity_id || '—'}`,
-        ``,
-        `--- Manifest ---`,
-        `Hash: ${data.birth_manifest?.provenance?.birth_manifest_hash || '—'}`,
-        `Protocol: ${data.birth_manifest?.protocol || '—'}`,
-        ``,
-        `--- On-Chain Attestation ---`,
-        `Network: ${data.mainnet_proof?.network || data.verification?.network || '0G Aristotle Mainnet'}`,
-        `Chain ID: ${data.mainnet_proof?.chain_id || data.verification?.chain_id || 16661}`,
-        `TxID: ${data.mainnet_proof?.txid || data.verification?.txid || '—'}`,
-        `Block: ${data.mainnet_proof?.block || data.verification?.block || '—'}`,
-        ``,
-        `--- Verification ---`,
-        `Verified At: ${data.mainnet_proof?.verified_at || data.verification?.verified_at || '—'}`,
-        ``,
-        `--- Links ---`,
-        `Explorer: ${data.verification?.explorer_url || `https://chainscan.0g.ai/tx/${data.mainnet_proof?.txid || ''}`}`,
-        `API: ${window.location.origin}/api/birth/${data.birth_id}/proof`,
-        ``,
-        `=== LIMITLESS | TRUTH ===`
-      ].join('\n');
-      
-      alert(proofText);
-    } catch (error) {
-      console.error('[QPF Birth] Failed to load proof:', error);
-    }
-  },
-  
-  async startChat() {
-    try {
-      console.log('[QPF Birth] Starting AI interaction...');
-      
-      const data = await this.apiCall(`/${this.birthId}/interact`, {
-        method: 'POST',
-      });
-      
-      this.elements.displays.meetIdentity.textContent = data.identity_id;
-      this.showState('ready');
-      
-      console.log('[QPF Birth] AI session ready');
-    } catch (error) {
-      this.showError('Failed to start interaction', error.message);
-    }
-  },
-  
-  goToMeet() {
-    this.elements.displays.meetIdentity.textContent = this.identityId || '—';
-    this.showState('ready');
-  },
-  
-  reset() {
-    this.birthId = null;
-    this.identityId = null;
-    this.showState('intro');
-    console.log('[QPF Birth] Reset to intro state');
-  },
-  
-  showState(stateName) {
-    Object.values(this.elements.views).forEach(view => {
-      view.classList.remove('active');
+  }
+  function runCreationSequence() {
+    ['step-identity', 'step-memory', 'step-boundaries', 'step-verification'].forEach(function (id, i) {
+      setTimeout(function () {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var ind = el.querySelector('.step-indicator');
+        var st = el.querySelector('.step-status');
+        if (ind) { ind.className = 'step-indicator complete'; ind.textContent = 'OK'; }
+        if (st) { st.textContent = 'complete'; }
+      }, i * 700);
     });
-    
-    const targetView = this.elements.views[stateName];
-    if (targetView) {
-      targetView.classList.add('active');
-      this.currentState = stateName;
-      console.log(`[QPF Birth] State: ${stateName}`);
+  }
+  function createIdentity() {
+    showState('creating');
+    runCreationSequence();
+    protocol.create(currentBirthId).then(function (rec) {
+      E.d.newIdentityId.textContent = rec.ai_identity.identity_id;
+      E.d.newIdentityTime.textContent = new Date().toLocaleString();
+      E.d.identityIdDisplay.textContent = rec.ai_identity.identity_id;
+      return delay(2600).then(function () { showState('identityCreated'); });
+    }).catch(function (err) { showError('Identity creation failed', err.message); });
+  }
+  function startAttestation() {
+    showState('attesting');
+    var rec0 = null;
+    protocol.attest(currentBirthId).then(function (rec) {
+      rec0 = rec;
+      return rpcCall('eth_chainId').then(function (chainHex) {
+        var observed = parseInt(chainHex, 16);
+        return protocol.recordChainObservation(currentBirthId,
+          { provider: 'evmrpc.0g.ai', chain_id_observed: observed });
+      }).catch(function (rpcErr) {
+        return protocol.recordChainObservation(currentBirthId, { provider: 'unreachable' })
+          .then(function () { throw new Error('Could not reach 0G Aristotle RPC (evmrpc.0g.ai): ' + rpcErr.message); });
+      });
+    }).then(function (rec) {
+      var ref = rec.attestation.chain_reference || {};
+      if (ref.chain_id_observed !== OG_CHAIN_ID) {
+        throw new Error('Chain ID mismatch: observed ' + ref.chain_id_observed + ', expected ' + OG_CHAIN_ID);
+      }
+      return protocol.verifyObserved(currentBirthId, {
+        type: 'local_manifest_commitment',
+        manifest_hash: rec0.birth_manifest.provenance.birth_manifest_hash,
+        chain_id_observed: ref.chain_id_observed,
+        chain_provider: ref.provider,
+        verified_at: new Date().toISOString(),
+        note: 'Manifest committed locally; 0G Aristotle chain reachable (chainId verified). No transaction fabricated.'
+      });
+    }).then(function (rec) {
+      E.d.verifiedTime.textContent = new Date().toLocaleString();
+      E.d.verifiedIdentity.textContent = rec.ai_identity.identity_id;
+      if (E.d.verifiedChain && rec.attestation && rec.attestation.chain_reference) E.d.verifiedChain.textContent = String(rec.attestation.chain_reference.chain_id_observed) + ' (live read via ' + rec.attestation.chain_reference.provider + ')';
+      showState('verified');
+    }).catch(function (err) {
+      if (err.message && err.message.indexOf('Could not reach') === 0) showState('incomplete');
+      else showError('Attestation failed', err.message);
+    });
+  }
+  function viewProof() {
+    var proof = protocol.getProof(currentBirthId);
+    if (!proof) { showError('No proof available', 'Complete verification first.'); return; }
+    var lines = ['=== BIRTH PROOF ===', '',
+      'Birth ID: ' + proof.birth_id, 'State: ' + proof.state,
+      'Identity: ' + ((proof.ai_identity && proof.ai_identity.identity_id) || '-'), '',
+      '--- Manifest ---',
+      'Hash: ' + ((proof.birth_manifest.provenance && proof.birth_manifest.provenance.birth_manifest_hash) || '-'),
+      'Protocol: ' + (proof.birth_manifest.protocol || '-'), '',
+      '--- Chain Observation (live read, not a write) ---',
+      'Provider: ' + ((proof.attestation.chain_reference && proof.attestation.chain_reference.provider) || '-'),
+      'Chain ID observed: ' + ((proof.attestation.chain_reference && proof.attestation.chain_reference.chain_id_observed) || '-'), '',
+      '--- Verification ---',
+      'Verified At: ' + ((proof.mainnet_proof && proof.mainnet_proof.verified_at) || '-'), '',
+      '=== LIMITLESS | TRUTH ==='];
+    alert(lines.join('\n'));
+  }
+  function goToMeet() {
+    var rec = protocol.get(currentBirthId);
+    E.d.meetIdentity.textContent = (rec && rec.ai_identity.identity_id) || '-';
+    showState('ready');
+  }
+  function startChat() {
+    protocol.interact(currentBirthId).then(function () { goToMeet(); })
+      .catch(function () { goToMeet(); });
+  }
+  function reset() { showState('intro'); }
+  document.addEventListener('DOMContentLoaded', function () {
+    E = els();
+    if (E.btn.begin) E.btn.begin.addEventListener('click', startBirth);
+    if (E.btn.passkey) E.btn.passkey.addEventListener('click', function () { doAuthorize('passkey_webauthn'); });
+    if (E.btn.simulated) E.btn.simulated.addEventListener('click', function () { doAuthorize('simulated'); });
+    if (E.btn.create) E.btn.create.addEventListener('click', createIdentity);
+    if (E.btn.attest) E.btn.attest.addEventListener('click', startAttestation);
+    if (E.btn.viewProof) E.btn.viewProof.addEventListener('click', viewProof);
+    if (E.btn.chat) E.btn.chat.addEventListener('click', startChat);
+    if (E.btn.retry) E.btn.retry.addEventListener('click', reset);
+    if (E.btn.retryAttest) E.btn.retryAttest.addEventListener('click', startAttestation);
+    if (E.btn.meetAnyway) E.btn.meetAnyway.addEventListener('click', goToMeet);
+    // Recovery: if a birth is already in progress, resume its state
+    if (currentBirthId) {
+      var rec = protocol.get(currentBirthId);
+      if (rec) {
+        var map = {}; map[S.AUTH_REQUIRED] = 'auth'; map[S.AUTHORIZED] = 'authorized';
+        map[S.CREATING] = 'creating'; map[S.IDENTITY_CREATED] = 'identityCreated';
+        map[S.ATTESTING] = 'attesting'; map[S.MAINNET_PENDING] = 'attesting';
+        map[S.VERIFIED] = 'verified'; map[S.READY] = 'ready'; map[S.INTERACTING] = 'ready';
+        var view = map[rec.state];
+        if (view) {
+          if (rec.ai_identity && rec.ai_identity.identity_id) {
+            E.d.newIdentityId.textContent = rec.ai_identity.identity_id;
+            E.d.identityIdDisplay.textContent = rec.ai_identity.identity_id;
+            E.d.verifiedIdentity.textContent = rec.ai_identity.identity_id;
+            if (E.d.verifiedChain && rec.attestation && rec.attestation.chain_reference) E.d.verifiedChain.textContent = String(rec.attestation.chain_reference.chain_id_observed) + ' (live read via ' + rec.attestation.chain_reference.provider + ')';
+            E.d.meetIdentity.textContent = rec.ai_identity.identity_id;
+          }
+          E.d.commitmentCode.textContent = rec.birth_id;
+          showState(view);
+          return;
+        }
+      }
     }
-  },
-  
-  updateProgress(type, percent) {
-    const fillMap = {
-      auth: this.elements.progress.fillAuth,
-      authz: this.elements.progress.fillAuthz,
-      creating: this.elements.progress.fillCreating,
-      attesting: this.elements.progress.fillAttesting,
-    };
-    
-    const fill = fillMap[type];
-    if (fill) {
-      fill.style.width = `${percent * 100}%`;
-    }
-  },
-  
-  showAuthStatus(show) {
-    if (show) {
-      this.elements.authStatus.classList.remove('hidden');
-    } else {
-      this.elements.authStatus.classList.add('hidden');
-    }
-  },
-  
-  showError(title, message) {
-    this.elements.displays.errorMessage.textContent = title;
-    this.elements.displays.errorDetails.textContent = message;
-    this.showState('error');
-  },
-  
-  delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  },
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  BirthExperience.init();
-});
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = BirthExperience;
-}
+    showState('intro');
+  });
+})();

@@ -217,7 +217,7 @@
         </div>
         
         <button id="btn-attest" class="cta-button cta-button-primary">
-          Verify on 0G Aristotle
+          Check 0G Aristotle Network
         </button>
       </div>
     </section>
@@ -246,7 +246,7 @@
           </div>
           <div class="attestation-status">
             <div class="attestation-spinner"></div>
-            <p>Submitting attestation...</p>
+            <p>Reading 0G Aristotle (chain 16661) — verifying the network is live. No transaction is sent; nothing on-chain is claimed until a real confirmation is observed.</p>
           </div>
         </div>
       </div>
@@ -257,7 +257,7 @@
       <div class="birth-container verified-container">
         <div class="verified-badge">
           <div class="verified-check">✓</div>
-          <span>VERIFIED</span>
+          <span>IDENTITY COMMITTED</span>
         </div>
         
         <div class="birth-visual birth-visual-verified">
@@ -271,12 +271,12 @@
         
         <div class="verification-proof">
           <div class="proof-item">
-            <span class="proof-label">Network</span>
+            <span class="proof-label">Network checked</span>
             <span class="proof-value">0G Aristotle Mainnet</span>
           </div>
           <div class="proof-item">
-            <span class="proof-label">Chain</span>
-            <span class="proof-value">16661</span>
+            <span class="proof-label">Chain observed</span>
+            <span class="proof-value" id="verified-chain">—</span>
           </div>
           <div class="proof-item">
             <span class="proof-label">Verified At</span>
@@ -359,6 +359,7 @@
     </section>
   </main>
   
+  <script src="birth-assets/qpf-birth-browser.js"></script>
   <script src="birth-assets/birth.js"></script>
 </body>
 </html>
