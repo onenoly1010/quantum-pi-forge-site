@@ -1,6 +1,32 @@
-// ========================================
-// COUNTDOWN TIMER
-// ========================================
+// FREE CHECK FORM — honest local behavior: no backend, no fabricated submission.
+// Validates input and routes the visitor to Ask OINIO (read-only evidence
+// interface) with their claim pre-filled. Never claims submission or verification.
+(function () {
+  var form = document.getElementById('freeCheckForm');
+  if (!form) return;
+  var claim = document.getElementById('freeCheckClaim');
+  var note = document.getElementById('freeCheckNote');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = (claim.value || '').trim();
+    if (text.length < 12) {
+      note.textContent = 'Describe the claim in a sentence or two — include a link if one exists.';
+      claim.focus();
+      return;
+    }
+    note.textContent = 'Claim noted below — press ASK OINIO and paste it there. OINIO answers from public evidence and says UNKNOWN when it does not know.';
+    var oinio = document.getElementById('ask-oinio');
+    var input = document.getElementById('oinioInput');
+    var panel = document.getElementById('oinioPanel');
+    var openBtn = document.getElementById('oinioOpenBtn');
+    if (oinio) oinio.scrollIntoView({ behavior: 'smooth' });
+    if (panel && panel.hidden && openBtn) openBtn.click();
+    if (input) { input.value = 'Can you check this claim against public QPF evidence? ' + text.slice(0, 400); input.focus(); }
+  });
+})();
+
+// COUNTDOWN (legacy, defensive): elements were removed in the first-visit
+// redesign; guard so missing IDs never throw.
 
 // Target date: Dec 17, 2025 23:59:59 UTC
 const launchDate = new Date('2025-12-17T23:59:59Z').getTime();
@@ -56,9 +82,11 @@ function updateCountdownElements(days, hours, minutes, seconds) {
   if (heroSeconds) heroSeconds.textContent = seconds;
 }
 
-// Update countdown immediately and then every second
+// Legacy countdown IDs no longer exist; run only if present (never throws).
+if (document.getElementById('heroDays') || document.getElementById('bannerDays')) {
 updateCountdown();
 countdownInterval = setInterval(updateCountdown, 1000);
+}
 
 // ========================================
 // SMOOTH SCROLL NAVIGATION

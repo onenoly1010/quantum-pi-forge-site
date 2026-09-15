@@ -11,6 +11,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "birth.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "api/**/*.js",
       "use": "@vercel/node"
     }
@@ -19,6 +23,10 @@
     {
       "src": "/",
       "dest": "/index.html"
+    },
+    {
+      "src": "/birth",
+      "dest": "/birth.html"
     },
     {
       "src": "/dashboard",
@@ -63,7 +71,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js|png|jpg|svg|ico|woff|woff2|ttf|eot|otf))",
+      "source": "/(.*\\.(css|js|png|jpg|svg|ico|json|woff|woff2|ttf|eot|otf))",
       "headers": [
         {
           "key": "Cache-Control",

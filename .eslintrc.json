@@ -1,7 +1,7 @@
 {
   "env": {
     "browser": true,
-    "es2021": true,
+    "es2020": true,
     "node": true
   },
   "extends": "eslint:recommended",
@@ -14,10 +14,5 @@
     "no-console": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }]
-  },
-  "ignorePatterns": [
-    "node_modules/",
-    "dist/",
-    "build/"
-  ]
+  }
 }

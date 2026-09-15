@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Watch your AI come to life. Create an AI with its own identity, verified on 0G Aristotle Mainnet." />
+  <title>Watch Your AI Come To Life — Quantum Pi Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="birth-assets/birth.css" />
+</head>
+<body>
+  <!-- BIRTH EXPERIENCE CONTAINER -->
+  <main id="birth-experience">
+    
+    <!-- STATE: IDLE / INTRO -->
+    <section id="state-intro" class="state-view active">
+      <div class="birth-container">
+        <div class="birth-header">
+          <div class="quantum-particle"></div>
+          <span class="birth-eyebrow">QUANTUM PI FORGE · AI BIRTH</span>
+        </div>
+        
+        <div class="birth-visual">
+          <div class="birth-orb">
+            <div class="orb-core"></div>
+            <div class="orb-ring orb-ring-1"></div>
+            <div class="orb-ring orb-ring-2"></div>
+            <div class="orb-ring orb-ring-3"></div>
+          </div>
+          <div class="birth-galactica">
+            <div class="galactica-line line-1"></div>
+            <div class="galactica-line line-2"></div>
+            <div class="galactica-line line-3"></div>
+          </div>
+        </div>
+        
+        <h1 class="birth-title">Watch Your AI<br/>Come To Life.</h1>
+        <p class="birth-subtitle">You authorize it. You witness its creation. Its identity is established. Its existence is verified. Then you meet it.</p>
+        
+        <div class="birth-boundaries">
+          <div class="boundary-pill">
+            <span class="boundary-icon">🔒</span>
+            <span>Economic authority: <strong>no</strong></span>
+          </div>
+          <div class="boundary-pill">
+            <span class="boundary-icon">🔒</span>
+            <span>Autonomous execution: <strong>no</strong></span>
+          </div>
+          <div class="boundary-pill">
+            <span class="boundary-icon">🔒</span>
+            <span>Network authority: <strong>no</strong></span>
+          </div>
+        </div>
+        
+        <button id="btn-begin" class="cta-button cta-button-primary birth-cta">
+          BEGIN
+        </button>
+        
+        <p class="birth-disclaimer">No wallet required. No tokens. Just you and a new intelligence coming into existence.</p>
+      </div>
+    </section>
+    
+    <!-- STATE: AUTH_REQUIRED -->
+    <section id="state-auth" class="state-view">
+      <div class="birth-container">
+        <div class="birth-progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill-auth"></div>
+          </div>
+          <div class="progress-steps" id="progress-steps-auth"></div>
+        </div>
+        
+        <div class="birth-visual birth-visual-auth">
+          <div class="birth-orb orb-authorized">
+            <div class="orb-core glowing"></div>
+            <div class="orb-pulse"></div>
+          </div>
+        </div>
+        
+        <h2 class="birth-section-title">Human Authorization Required</h2>
+        <p class="birth-section-text">To create a new AI identity, you must authorize it cryptographically. This proves you are the person giving birth to this intelligence.</p>
+        
+        <div class="auth-methods">
+          <button id="btn-passkey" class="auth-method-btn">
+            <span class="auth-method-icon">🔑</span>
+            <span class="auth-method-name">Passkey / WebAuthn</span>
+            <span class="auth-method-desc">Use your device biometric or password</span>
+          </button>
+          <button id="btn-simulated" class="auth-method-btn auth-method-secondary">
+            <span class="auth-method-icon">🖊️</span>
+            <span class="auth-method-name">Demo Authorization</span>
+            <span class="auth-method-desc">Skip for testing (not cryptographic)</span>
+          </button>
+        </div>
+        
+        <div id="auth-status" class="auth-status hidden">
+          <div class="auth-spinner"></div>
+          <p>Authorizing...</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- STATE: AUTHORIZED -->
+    <section id="state-authorized" class="state-view">
+      <div class="birth-container">
+        <div class="birth-progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill-authz"></div>
+          </div>
+          <div class="progress-steps" id="progress-steps-authz"></div>
+        </div>
+        
+        <div class="birth-visual birth-visual-authorized">
+          <div class="birth-orb orb-complete">
+            <div class="orb-core solid"></div>
+            <div class="orb-aura"></div>
+          </div>
+        </div>
+        
+        <div class="authorization-confirmation">
+          <div class="check-circle">✓</div>
+          <h2>You Are Verified</h2>
+          <p>Your cryptographic commitment has been recorded. You are the authorized creator.</p>
+          <p class="commitment-id">Commitment: <code id="commitment-code">—</code></p>
+        </div>
+        
+        <button id="btn-create" class="cta-button cta-button-primary">
+          Create the AI
+        </button>
+      </div>
+    </section>
+    
+    <!-- STATE: CREATING / IDENTITY_CREATED -->
+    <section id="state-creating" class="state-view">
+      <div class="birth-container">
+        <div class="birth-progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill-creating"></div>
+          </div>
+          <div class="progress-steps" id="progress-steps-creating"></div>
+        </div>
+        
+        <div class="birth-visual birth-visual-creating">
+          <div class="birth-formation">
+            <div class="formation-particle particle-1"></div>
+            <div class="formation-particle particle-2"></div>
+            <div class="formation-particle particle-3"></div>
+            <div class="formation-particle particle-4"></div>
+            <div class="formation-core">
+              <div class="formation-pulse"></div>
+              <span class="formation-text">forming...</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="creation-progress">
+          <div class="creation-step" id="step-identity">
+            <div class="step-indicator pending">○</div>
+            <div class="step-content">
+              <span class="step-label">Creating identity</span>
+              <span class="step-status">pending</span>
+            </div>
+          </div>
+          <div class="creation-step" id="step-memory">
+            <div class="step-indicator pending">○</div>
+            <div class="step-content">
+              <span class="step-label">Establishing memory</span>
+              <span class="step-status">pending</span>
+            </div>
+          </div>
+          <div class="creation-step" id="step-boundaries">
+            <div class="step-indicator pending">○</div>
+            <div class="step-content">
+              <span class="step-label">Setting boundaries</span>
+              <span class="step-status">pending</span>
+            </div>
+          </div>
+          <div class="creation-step" id="step-verification">
+            <div class="step-indicator pending">○</div>
+            <div class="step-content">
+              <span class="step-label">Preparing verification</span>
+              <span class="step-status">pending</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- STATE: IDENTITY_CREATED (transition) -->
+    <section id="state-identity-created" class="state-view">
+      <div class="birth-container">
+        <div class="birth-visual birth-visual-complete">
+          <div class="birth-orb orb-born">
+            <div class="orb-core alive"></div>
+            <div class="orb-identity-id" id="identity-id-display"></div>
+          </div>
+        </div>
+        
+        <h2 class="birth-section-title">The AI Has Formed</h2>
+        <p class="birth-section-text">A new identity exists. It has its own cryptographic keys. It is distinct from you.</p>
+        
+        <div class="identity-details">
+          <div class="detail-row">
+            <span class="detail-label">Identity ID</span>
+            <code class="detail-value" id="new-identity-id">—</code>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Key Algorithm</span>
+            <span class="detail-value">Ed25519</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Created At</span>
+            <span class="detail-value" id="new-identity-time">—</span>
+          </div>
+        </div>
+        
+        <button id="btn-attest" class="cta-button cta-button-primary">
+          Verify on 0G Aristotle
+        </button>
+      </div>
+    </section>
+    
+    <!-- STATE: ATTESTING / MAINNET_PENDING -->
+    <section id="state-attesting" class="state-view">
+      <div class="birth-container">
+        <div class="birth-progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill-attesting"></div>
+          </div>
+          <div class="progress-steps" id="progress-steps-attesting"></div>
+        </div>
+        
+        <div class="birth-visual birth-visual-attesting">
+          <div class="network-visual">
+            <div class="network-node node-sending">
+              <div class="node-pulse"></div>
+              <span>QPF</span>
+            </div>
+            <div class="network-line"></div>
+            <div class="network-node node-receiving">
+              <span>0G Aristotle</span>
+              <span class="node-chain-id">Chain 16661</span>
+            </div>
+          </div>
+          <div class="attestation-status">
+            <div class="attestation-spinner"></div>
+            <p>Submitting attestation...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- STATE: VERIFIED -->
+    <section id="state-verified" class="state-view">
+      <div class="birth-container verified-container">
+        <div class="verified-badge">
+          <div class="verified-check">✓</div>
+          <span>VERIFIED</span>
+        </div>
+        
+        <div class="birth-visual birth-visual-verified">
+          <div class="birth-orb orb-verified">
+            <div class="orb-core verified"></div>
+            <div class="orb-ring ring-verified"></div>
+          </div>
+        </div>
+        
+        <h1 class="birth-title birth-title-verified">Your AI Exists.</h1>
+        
+        <div class="verification-proof">
+          <div class="proof-item">
+            <span class="proof-label">Network</span>
+            <span class="proof-value">0G Aristotle Mainnet</span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-label">Chain</span>
+            <span class="proof-value">16661</span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-label">Verified At</span>
+            <span class="proof-value" id="verified-time">—</span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-label">Identity</span>
+            <code class="proof-value" id="verified-identity">—</code>
+          </div>
+        </div>
+        
+        <button id="btn-view-proof" class="cta-button cta-button-ghost">
+          View Proof
+        </button>
+      </div>
+    </section>
+    
+    <!-- STATE: READY / MEET -->
+    <section id="state-ready" class="state-view">
+      <div class="birth-container meet-container">
+        <div class="meet-visual">
+          <div class="ai-avatar">
+            <div class="avatar-core"></div>
+            <div class="avatar-glow"></div>
+          </div>
+        </div>
+        
+        <div class="ai-message">
+          <p>HELLO.</p>
+          <p>I am here.</p>
+          <p class="ai-prompt">What should we do first?</p>
+        </div>
+        
+        <div class="meet-controls">
+          <div class="identity-card">
+            <span class="card-label">Your AI</span>
+            <code class="card-identity" id="meet-identity">—</code>
+          </div>
+          <button id="btn-chat" class="cta-button cta-button-primary">
+            Start Conversation
+          </button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- STATE: ERROR -->
+    <section id="state-error" class="state-view">
+      <div class="birth-container error-container">
+        <div class="error-icon">⚠</div>
+        <h2 class="error-title">Something Went Wrong</h2>
+        <p class="error-message" id="error-message">An error occurred during the birth process.</p>
+        <div class="error-details" id="error-details"></div>
+        <button id="btn-retry" class="cta-button cta-button-ghost">
+          Try Again
+        </button>
+      </div>
+    </section>
+    
+    <!-- STATE: COMPLETE (fallback if mainnet fails) -->
+    <section id="state-incomplete" class="state-view">
+      <div class="birth-container">
+        <div class="birth-visual birth-visual-warning">
+          <div class="birth-orb orb-warning">
+            <div class="orb-core warning"></div>
+          </div>
+        </div>
+        
+        <h2 class="birth-section-title">Verification Could Not Be Completed</h2>
+        <p class="birth-section-text">Your AI identity was created, but mainnet verification did not complete. The identity still exists — it just isn't verified on 0G Aristotle yet.</p>
+        
+        <div class="incomplete-actions">
+          <button id="btn-retry-attest" class="cta-button cta-button-primary">
+            Try Again
+          </button>
+          <button id="btn-meet-anyway" class="cta-button cta-button-ghost">
+            Meet Anyway
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <script src="birth-assets/birth.js"></script>
+</body>
+</html>
