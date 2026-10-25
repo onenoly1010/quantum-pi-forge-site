@@ -99,6 +99,10 @@
           <div class="auth-spinner"></div>
           <p>Authorizing...</p>
         </div>
+        <div id="webauthn-status" class="webauthn-status hidden">
+          <div class="webauthn-icon">🔑</div>
+          <p>Confirm on your device…</p>
+        </div>
       </div>
     </section>
     
@@ -267,8 +271,13 @@
           </div>
         </div>
         
-        <h1 class="birth-title birth-title-verified">Your AI Exists.</h1>
-        
+        <h1 class="birth-title birth-title-verified">Your AI identity exists on this device.</h1>
+
+        <p class="birth-section-text" style="max-width: 480px; margin: 0 auto 1.5rem;">
+          A new AI identity has been created and verified. It has its own cryptographic keys and is distinct from you.
+          This identity lives on your device — it is not an autonomous agent, but a container for an AI identity you control.
+        </p>
+
         <div class="verification-proof">
           <div class="proof-item">
             <span class="proof-label">Network checked</span>

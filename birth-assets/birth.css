@@ -999,6 +999,21 @@ body {
   margin-top: 1.5rem;
   font-size: 0.85rem;
   color: var(--qpf-text-muted);
+
+/* ==========================================
+    BIRTH EXPLANATION (post-verification guidance)
+    ========================================== */
+
+.birth-explanation {
+  color: var(--qpf-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
 }
 
 /* ==========================================
@@ -1033,4 +1048,36 @@ code {
   .creation-step {
     padding: 0.5rem 0.75rem;
   }
+}
+
+/* ==========================================
+    WEBAUTHN STATUS
+    ========================================== */
+
+.webauthn-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-top: 1.5rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid var(--qpf-accent);
+  border-radius: 12px;
+  color: var(--qpf-accent-glow);
+  font-size: 0.95rem;
+}
+
+.webauthn-status.hidden {
+  display: none;
+}
+
+.webauthn-icon {
+  font-size: 1.25rem;
+  animation: pulse 1.5s infinite;
+}
+
+.webauthn-status p {
+  margin: 0;
+  font-weight: 500;
 }

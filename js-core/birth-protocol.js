@@ -69,8 +69,25 @@ function newBirthId() {
   return `birth-${crypto.randomBytes(8).toString('hex')}`;
 }
 
+function sortKeysDeep(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(sortKeysDeep);
+  const sorted = {};
+  Object.keys(obj).sort().forEach(k => { sorted[k] = sortKeysDeep(obj[k]); });
+  return sorted;
+}
+
+function canonicalStringify(obj) {
+  if (obj === null) return 'null';
+  if (typeof obj === 'string') return JSON.stringify(obj);
+  if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj);
+  if (Array.isArray(obj)) return '[' + obj.map(canonicalStringify).join(',') + ']';
+  const keys = Object.keys(obj).sort();
+  return '{' + keys.map(k => JSON.stringify(k) + ':' + canonicalStringify(obj[k])).join(',') + '}';
+}
+
 function computeBirthManifestHash(manifest) {
-  const canonical = JSON.stringify(manifest, Object.keys(manifest).sort());
+  const canonical = canonicalStringify(manifest);
   return crypto.createHash('sha256').update(canonical).digest('hex');
 }
 
@@ -471,6 +488,7 @@ module.exports = {
   createAuthorizationCommitment,
   createAIIdentity,
   createBirthManifest,
+  computeBirthManifestHash,
   isValidTransition,
   newBirthId,
   generateIdentityId,
