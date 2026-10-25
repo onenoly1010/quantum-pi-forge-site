@@ -56,27 +56,10 @@
     for (var k = 0; k < text.length; k++) { h1 = (Math.imul(h1 ^ text.charCodeAt(k), 16777619)) >>> 0; }
     return Promise.resolve('fnv-fallback-' + h1.toString(16));
   }
-  function sortKeysDeep(obj) {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (Array.isArray(obj)) return obj.map(sortKeysDeep);
-  var sorted = {};
-  Object.keys(obj).sort().forEach(function (k) { sorted[k] = sortKeysDeep(obj[k]); });
-  return sorted;
-}
-
-function canonicalStringify(obj) {
-  if (obj === null) return 'null';
-  if (typeof obj === 'string') return JSON.stringify(obj);
-  if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj);
-  if (Array.isArray(obj)) return '[' + obj.map(canonicalStringify).join(',') + ']';
-  var keys = Object.keys(obj).sort();
-  return '{' + keys.map(function(k) { return JSON.stringify(k) + ':' + canonicalStringify(obj[k]); }).join(',') + '}';
-}
-
-function computeBirthManifestHash(manifest) {
-  var canonical = canonicalStringify(manifest);
-  return sha256Hex(canonical);
-}
+  function computeBirthManifestHash(manifest) {
+    var canonical = JSON.stringify(manifest, Object.keys(manifest).sort());
+    return sha256Hex(canonical);
+  }
   function BirthRecord(opts) {
     opts = opts || {};
     this.birth_id = opts.birth_id;
@@ -108,7 +91,7 @@ function computeBirthManifestHash(manifest) {
     opts = opts || {};
     var now = utcnow();
     var manifest = {
-      protocol: 'qpf-birth/v0', protocol_version: '0.1.0',
+      protocol: 'qpf-birth/v0', protocol_version: '0.2.0',
       birth_id: opts.birth_id || newBirthId(), created_at: now,
       human_authorization: { authorization_commitment: opts.human_authorization_commitment ||
         { method: 'pending', statement: 'pending', authorized_at: now } },
@@ -259,7 +242,6 @@ function computeBirthManifestHash(manifest) {
     BirthProtocol: BirthProtocol, BirthStorage: BirthStorage,
     createAuthorizationCommitment: createAuthorizationCommitment,
     createAIIdentity: createAIIdentity, createBirthManifest: createBirthManifest,
-    computeBirthManifestHash: computeBirthManifestHash,
     isValidTransition: isValidTransition, newBirthId: newBirthId,
     generateIdentityId: generateIdentityId, sha256Hex: sha256Hex };
   global.QPFBirth = QPFBirth;
