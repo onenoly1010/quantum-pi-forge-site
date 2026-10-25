@@ -268,6 +268,82 @@ body {
   margin: 0 auto 2.5rem;
 }
 
+/* ===== INDEPENDENT CHECK ===== */
+.hero-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin: 0.75rem 0 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.verify-instructions {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.verify-instructions ol {
+  margin: 1rem 0 1.5rem;
+  padding-left: 1.25rem;
+  color: var(--color-silver);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.verify-instructions li {
+  margin-bottom: 0.25rem;
+}
+
+.verify-instructions code {
+  background: rgba(0, 255, 204, 0.1);
+  padding: 0.125rem 0.35rem;
+  border-radius: 3px;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.95rem;
+  color: var(--color-cyan);
+}
+
+.verify-receipt {
+  background: #0f0f1a;
+  border: 1px solid var(--color-dark-silver);
+  border-radius: 6px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #d4f1f1;
+  margin: 1.5rem 0;
+}
+
+.verify-receipt code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.verify-inspect {
+  color: var(--color-silver);
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+/* ===== NO UPFRONT PAYMENT section ===== */
+.payment-section .section-title,
+.payment-section .section-subtitle {
+  /* inherit standard section centering */
+}
+
+/* ===== OINIO read-only note ===== */
+.oinio-readonly {
+  color: var(--color-silver);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 1rem;
+  text-align: center;
+}
+
 .free-check-form { max-width: 640px; margin: 0 auto; display: grid; gap: 0.75rem; }
 .free-check-label { font-weight: 700; font-size: 0.9rem; }
 .free-check-input {

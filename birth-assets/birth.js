@@ -30,10 +30,18 @@
         verifiedTime: $('verified-time'), verifiedIdentity: $('verified-identity'), verifiedChain: $('verified-chain'),
         meetIdentity: $('meet-identity'), errorMessage: $('error-message'),
         errorDetails: $('error-details') },
-      authStatus: $('auth-status')
+      authStatus: $('auth-status'),
+      // WebAuthn status element
+      webauthnStatus: $('webauthn-status')
     };
   }
   var E = null;
+  // In-flight guard: prevents concurrent WebAuthn ceremonies
+  var isAuthorizing = false;
+  // WebAuthn feature detection
+  var webauthnAvailable = false;
+  var webauthnSupported = false;
+
   function showState(name) {
     var views = E.views;
     Object.keys(views).forEach(function (k) { if (views[k]) views[k].classList.remove('active'); });
@@ -49,6 +57,27 @@
     try { localStorage.setItem('qpf_birth_current', id); } catch (e) {}
   }
   function delay(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  // WebAuthn feature detection
+  function detectWebAuthn() {
+    // Check for credentials API
+    if (typeof navigator !== 'undefined' && navigator.credentials) {
+      webauthnAvailable = true;
+      // Check for PublicKeyCredential interface
+      if (typeof PublicKeyCredential !== 'undefined') {
+        webauthnSupported = true;
+      }
+    }
+    return { available: webauthnAvailable, supported: webauthnSupported };
+  }
+
+  // Initialize WebAuthn detection on load
+  function initWebAuthnDetection() {
+    var result = detectWebAuthn();
+    console.log('WebAuthn detection:', result);
+    return result;
+  }
+
   function rpcCall(method, params) {
     return fetch(OG_RPC, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: method, params: params || [] }) })
@@ -65,7 +94,31 @@
     }).catch(function (err) { showError('Failed to start birth', err.message); });
   }
   function doAuthorize(method) {
+    // Guard: prevent concurrent WebAuthn ceremonies
+    if (isAuthorizing) {
+      showError('Authorization already in progress', 'Please wait for the current authorization to complete. If you are using a passkey, confirm the prompt on your device.');
+      return;
+    }
+
     if (E.authStatus) E.authStatus.classList.remove('hidden');
+
+    // For WebAuthn, disable BEGIN and show device confirmation status
+    if (method === 'passkey_webauthn') {
+      isAuthorizing = true;
+      if (E.beginButton) {
+        E.beginButton.disabled = true;
+        E.beginButton.textContent = 'Confirming…';
+      }
+      if (E.webauthnStatus) {
+        E.webauthnStatus.classList.remove('hidden');
+        E.webauthnStatus.textContent = 'Confirm on your device…';
+      }
+      // Add aria-busy for accessibility
+      if (E.beginButton) {
+        E.beginButton.setAttribute('aria-busy', 'true');
+      }
+    }
+
     delay(method === 'passkey_webauthn' ? 1200 : 700).then(function () {
       var c = QPFBirth.createAuthorizationCommitment({ method: method,
         statement: 'I authorize the creation of a new QPF AI identity' + (method === 'simulated' ? ' (demo)' : '') });
@@ -74,10 +127,42 @@
       if (E.authStatus) E.authStatus.classList.add('hidden');
       E.d.commitmentCode.textContent = rec.birth_id;
       showState('authorized');
+      // Reset WebAuthn status
+      resetAuthorizingState();
     }).catch(function (err) {
       if (E.authStatus) E.authStatus.classList.add('hidden');
-      showError('Authorization failed', err.message);
+
+      // Distinguish InvalidStateError (pending request) from other errors
+      var isInvalidState = err.name === 'InvalidStateError' ||
+        (err.message && err.message.indexOf('A request is already pending') !== -1);
+
+      if (isInvalidState) {
+        showError('Authorization cancelled', 'The WebAuthn request was cancelled or a request was already pending. Please try again.');
+      } else if (err.name === 'NotAllowedError' || (err.message && err.message.indexOf('NotAllowed') !== -1)) {
+        showError('Authorization denied', 'The authentication was denied. Please try again.');
+      } else if (err.name === 'TimeoutError' || (err.message && err.message.indexOf('timeout') !== -1)) {
+        showError('Authorization timed out', 'The authentication request timed out. Please try again.');
+      } else {
+        showError('Authorization failed', err.message || 'An unexpected error occurred.');
+      }
+      resetAuthorizingState();
     });
+  }
+
+  // Reset UI state after authorization completes or fails
+  function resetAuthorizingState() {
+    if (isAuthorizing) {
+      isAuthorizing = false;
+      if (E.beginButton) {
+        E.beginButton.disabled = false;
+        E.beginButton.textContent = 'BEGIN';
+        E.beginButton.removeAttribute('aria-busy');
+      }
+      if (E.webauthnStatus) {
+        E.webauthnStatus.classList.add('hidden');
+        E.webauthnStatus.textContent = '';
+      }
+    }
   }
   function runCreationSequence() {
     ['step-identity', 'step-memory', 'step-boundaries', 'step-verification'].forEach(function (id, i) {
@@ -166,7 +251,14 @@
   function reset() { showState('intro'); }
   document.addEventListener('DOMContentLoaded', function () {
     E = els();
-    if (E.btn.begin) E.btn.begin.addEventListener('click', startBirth);
+    // Initialize WebAuthn detection
+    initWebAuthnDetection();
+
+    // Store references to key buttons for in-flight guard
+    E.beginButton = E.btn.begin;
+    if (E.beginButton) {
+      E.beginButton.addEventListener('click', startBirth);
+    }
     if (E.btn.passkey) E.btn.passkey.addEventListener('click', function () { doAuthorize('passkey_webauthn'); });
     if (E.btn.simulated) E.btn.simulated.addEventListener('click', function () { doAuthorize('simulated'); });
     if (E.btn.create) E.btn.create.addEventListener('click', createIdentity);

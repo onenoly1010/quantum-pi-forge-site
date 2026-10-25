@@ -46,6 +46,7 @@
       <p class="hero-eyebrow">QUANTUM PI FORGE · VERIFICATION YOU CAN INSPECT</p>
       <h1 class="hero-title">KNOW WHAT IS REAL BEFORE YOU TRUST IT.</h1>
       <p class="hero-subtitle">Quantum Pi Forge checks digital claims, systems, and AI-generated assertions against evidence you can inspect.</p>
+      <p class="hero-value">Check a claim. Get a receipt. No wallet.</p>
       <div class="hero-cta-row">
         <a class="cta-button cta-button-primary" href="#start">TRY A FREE CHECK</a>
         <a class="cta-button cta-button-ghost" href="#how">SEE HOW IT WORKS</a>
@@ -61,9 +62,9 @@
       <p class="section-subtitle">Three doors. Same evidence underneath.</p>
       <div class="card-grid start-grid">
         <article class="innovation-card start-card">
-          <h3 class="card-title">I have something to verify</h3>
-          <p class="card-description">A public claim, link, deployment, repository, or AI-system assertion. Free to start.</p>
-          <a class="cta-button cta-button-primary" href="#free-check">START A FREE CHECK</a>
+          <h3 class="card-title">I want to verify what's claimed</h3>
+          <p class="card-description">Run the independent check against QPF's public evidence. No account, no wallet, no payment.</p>
+          <a class="cta-button cta-button-primary" href="#independent-check">RUN THE CHECK</a>
         </article>
         <article class="innovation-card start-card">
           <h3 class="card-title">I want to understand QPF</h3>
@@ -79,17 +80,34 @@
     </div>
   </section>
 
-  <!-- FREE CHECK -->
-  <section id="free-check" class="section free-check-section">
+  <!-- INDEPENDENT CHECK -->
+  <section id="independent-check" class="section independent-check-section">
     <div class="section-container">
-      <h2 class="section-title">TRY A FREE CHECK</h2>
-      <p class="section-subtitle">Describe the claim in plain language. No account, no wallet, no payment.</p>
-      <form class="free-check-form" id="freeCheckForm">
-        <label class="free-check-label" for="freeCheckClaim">What claim should we check?</label>
-        <textarea id="freeCheckClaim" class="free-check-input" rows="3" maxlength="1200" placeholder="Example: this deployment is what its publisher says it is — https://…"></textarea>
-        <button type="submit" class="cta-button cta-button-primary">REQUEST MY FREE CHECK</button>
-        <p class="free-check-note" id="freeCheckNote" aria-live="polite">Free checks are reviewed against public evidence. We separate claimed, found, verified, and unknown.</p>
-      </form>
+      <h2 class="section-title">TRY THE INDEPENDENT CHECK</h2>
+      <p class="section-subtitle">Run the existing verification yourself. No account, no wallet, no payment.</p>
+      <div class="verify-instructions">
+        <ol>
+          <li>Open a terminal in the <code>Quantum-pi-forge</code> directory</li>
+          <li>Run: <code>$ npm run verify:independent</code></li>
+          <li>Inspect the receipt written to <code>deploy/independent-verification-v1.json</code></li>
+        </ol>
+        <pre class="verify-receipt"><code>{
+  "schemaVersion": "qpf-independent-verification-v1",
+  "phase": 11,
+  "inputs": [
+    "evidence/live-rpc-correspondence-v1.json",
+    "evidence/build-artifact-manifest-v1.json",
+    "deploy/source-identity-correspondence-v1.json"
+  ],
+  "checks": [
+    { "input": "evidence/live-rpc-correspondence-v1.json", "result": "PASS" },
+    { "input": "evidence/build-artifact-manifest-v1.json", "result": "PASS" },
+    { "input": "deploy/source-identity-correspondence-v1.json", "result": "PASS" }
+  ],
+  "result": "PASS"
+}</code></pre>
+        <p class="verify-inspect">Open that JSON file in any editor. Each input shows <code>PASS</code> or <code>FAIL</code>; the top-level <code>"result"</code> is the overall verdict. No blockchain transaction, no wallet, no payment.</p>
+      </div>
     </div>
   </section>
 
@@ -140,11 +158,11 @@
     </div>
   </section>
 
-  <!-- MODEL + IDENTITY + INFRA (plain English first) -->
-  <section id="model" class="section model-section">
+  <!-- NO UPFRONT PAYMENT -->
+  <section id="payment" class="section payment-section">
     <div class="section-container">
-      <h2 class="section-title">START WITHOUT PAYING UPFRONT</h2>
-      <p class="section-subtitle">Begin where practical without paying upfront. If a measurable outcome is created, QPF may participate in an agreed portion of that value. No value means no percentage. Exact terms are agreed explicitly first.</p>
+      <h2 class="section-title">NO UPFRONT PAYMENT</h2>
+      <p class="section-subtitle">There is no paid verification service, no claim-submission form, and no wallet required to inspect the existing independent check.</p>
     </div>
   </section>
 
@@ -227,9 +245,9 @@
         <article class="faq-item">
           <h3 class="faq-question">Is the economy live? Is anything guaranteed?</h3>
           <p class="faq-answer">
-            Start without paying upfront where practical. If a measurable outcome is created, participation in an
-            agreed portion may follow — no value means no percentage. No guaranteed financial outcomes are implied;
-            protocol economics are only claimed where they are actually live.
+            There is no paid verification service or claim-submission form. QPF's independent
+            check (npm run verify:independent) is available to run yourself — see the receipt
+            for what is actually verified. No guaranteed financial outcomes are implied.
           </p>
         </article>
 
@@ -430,7 +448,7 @@
           and cannot mint, stake, trade, deploy, or modify QPF state.
           Unknown is not false.
         </p>
-        <div class="oinio-verify-box"><h3 class="oinio-verify-title">Need proof, not chat? Get a $2 verification.</h3><p class="oinio-verify-text">Send a file + what you want proven. You get a hash-chained evidence package any third party can re-check. Pay AFTER an ESTABLISHED verdict — FAILED means $0.</p><p class="oinio-verify-text"><a href="https://github.com/onenoly1010/quantum-pi-forge-site/issues/new?title=%5Bverification-request%5D%20verify%20my%20file&body=Describe%20what%20to%20prove.%20Example%3A%20file%20contains%20X." target="_blank" rel="noopener">Request a verification via GitHub issue →</a></p></div><p class="oinio-invite">Try to break it.</p>
+        <p class="oinio-readonly">OINIO is read-only: it answers from public QPF evidence and cannot mint, stake, trade, deploy, or modify QPF state. No paid verification service is offered here.</p>
       </div>
       <button class="cta-button" id="oinioOpenBtn">ASK OINIO</button>
     </div>
